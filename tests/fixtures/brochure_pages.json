@@ -1,0 +1,1227 @@
+{
+ "contents": [
+  {
+   "number": 0,
+   "images": [],
+   "linkOuts": [],
+   "offers": []
+  },
+  {
+   "number": 1,
+   "images": [],
+   "linkOuts": [],
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "f32300d2-2f1f-4c80-b92f-7b3cd48d5ea1",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/f32300d2-2f1f-4c80-b92f-7b3cd48d5ea1/main.jpg",
+      "parentContent": {
+       "id": "d6c82e39-5052-48b8-b8d0-814ec3babd87",
+       "legacyId": 2501269977,
+       "type": "static_brochure",
+       "page": {
+        "number": 1,
+        "area": {
+         "bottomRight": {
+          "x": 0.98212284,
+          "y": 0.9391263
+         },
+         "topLeft": {
+          "x": 0.016694492,
+          "y": 0.4968771
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Eisbergsalat",
+        "description": [
+         {
+          "paragraph": "Ursprung: Deutschland/Spanien, Klasse I, Je Stück"
+         }
+        ],
+        "images": [],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-105",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-48921103",
+          "name": "Lebensmittel"
+         },
+         {
+          "id": "DE-118",
+          "name": "Gemüse"
+         },
+         {
+          "id": "DE-1284",
+          "name": "Salat"
+         },
+         {
+          "id": "DE-2180014",
+          "name": "Eisbergsalat"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 0.65,
+        "min": 0.65,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-10-27T23:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  },
+  {
+   "number": 2,
+   "images": [],
+   "linkOuts": [],
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "b6f42850-e0af-46e3-93f4-b3f2503a3ae8",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/b6f42850-e0af-46e3-93f4-b3f2503a3ae8/main.jpg",
+      "parentContent": {
+       "id": "d6c82e39-5052-48b8-b8d0-814ec3babd87",
+       "legacyId": 2501269977,
+       "type": "static_brochure",
+       "page": {
+        "number": 2,
+        "area": {
+         "bottomRight": {
+          "x": 0.34390652,
+          "y": 0.64896756
+         },
+         "topLeft": {
+          "x": 0.008347246,
+          "y": 0.38348082
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Kiwi, lose",
+        "brandName": "Zespri",
+        "description": [
+         {
+          "paragraph": "Neuseeland Green Kiwifruit, Klasse I"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/b6f42850-e0af-46e3-93f4-b3f2503a3ae8/7f7cfd85-e57a-4b9a-8e82-4e5c6ae206b7.jpg",
+          "dimensions": {
+           "width": 341,
+           "height": 256
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-48989303",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-106949053",
+          "name": "Marken Lebensmittel"
+         },
+         {
+          "id": "DE-219291297",
+          "name": "Zespri"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 0.44,
+        "min": 0.44,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       },
+       {
+        "type": "REGULAR_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 0.49,
+        "min": 0.49,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    },
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "f42ec605-37cb-46a1-9cd7-17d1b879642b",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/f42ec605-37cb-46a1-9cd7-17d1b879642b/main.jpg",
+      "discountLabel": {
+       "value": "0.22",
+       "type": "DISCOUNT_AMOUNT"
+      },
+      "parentContent": {
+       "id": "d6c82e39-5052-48b8-b8d0-814ec3babd87",
+       "legacyId": 2501269977,
+       "type": "static_brochure",
+       "page": {
+        "number": 2,
+        "area": {
+         "bottomRight": {
+          "x": 0.34390652,
+          "y": 0.93706983
+         },
+         "topLeft": {
+          "x": 0.008347246,
+          "y": 0.64896756
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Granatapfel",
+        "description": [
+         {
+          "paragraph": "Spanien/Türkei Klasse I"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/f42ec605-37cb-46a1-9cd7-17d1b879642b/403e4d61-3ff2-4755-a9b2-365b84112c22.jpg",
+          "dimensions": {
+           "width": 471,
+           "height": 471
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-48989303",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-125813220",
+          "name": "Marken Lidl Lebensmittel"
+         },
+         {
+          "id": "DE-1342337245",
+          "name": "LIDL Connect Classic"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SPECIAL_PRICE",
+        "conditions": [
+         {
+          "other": "Mit Lidl Plus"
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 0.79,
+        "min": 0.79,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       },
+       {
+        "type": "SALES_PRICE",
+        "conditions": [
+         {
+          "other": "Je Stück"
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 0.89,
+        "min": 0.89,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       },
+       {
+        "type": "REGULAR_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 1.11,
+        "min": 1.11,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:59.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  },
+  {
+   "number": 6,
+   "images": [],
+   "linkOuts": [],
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "f7ded612-a465-4bad-a7e2-611f83c7660f",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/f7ded612-a465-4bad-a7e2-611f83c7660f/main.jpg",
+      "discountLabel": {
+       "value": "51",
+       "type": "DISCOUNT_PERCENTAGE"
+      },
+      "parentContent": {
+       "id": "d6c82e39-5052-48b8-b8d0-814ec3babd87",
+       "legacyId": 2501269977,
+       "type": "static_brochure",
+       "page": {
+        "number": 6,
+        "area": {
+         "bottomRight": {
+          "x": 0.32554257,
+          "y": 0.7135952
+         },
+         "topLeft": {
+          "x": 0,
+          "y": 0.3085468
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Tafelschokolade Alpenmilch",
+        "brandName": "FIN CARRÉ",
+        "description": [
+         {
+          "paragraph": "Je 100 g"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/f7ded612-a465-4bad-a7e2-611f83c7660f/866f54b7-a30b-4b8d-82b7-a44178d96cd0.jpg",
+          "dimensions": {
+           "width": 995,
+           "height": 1143
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-48989303",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-106949053",
+          "name": "Marken Lebensmittel"
+         },
+         {
+          "id": "DE-419541725",
+          "name": "Fairtrade"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 0.39,
+        "min": 0.39,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "1 kg = 3.90",
+        "description": ""
+       },
+       {
+        "type": "REGULAR_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 0.79,
+        "min": 0.79,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:59.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    },
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "8254acd3-e5c6-4a56-84a6-c6599a6574df",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/8254acd3-e5c6-4a56-84a6-c6599a6574df/main.jpg",
+      "discountLabel": {
+       "value": "4.00",
+       "type": "DISCOUNT_AMOUNT"
+      },
+      "parentContent": {
+       "id": "d6c82e39-5052-48b8-b8d0-814ec3babd87",
+       "legacyId": 2501269977,
+       "type": "static_brochure",
+       "page": {
+        "number": 6,
+        "area": {
+         "bottomRight": {
+          "x": 0.9999934,
+          "y": 0.4526316
+         },
+         "topLeft": {
+          "x": 0.36081538,
+          "y": 0.21491228
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Feinbiber Spannbettlaken",
+        "brandName": "Livarno",
+        "description": [
+         {
+          "paragraph": "ca. 90–100 x 200 cm. Je Stück\n"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/8254acd3-e5c6-4a56-84a6-c6599a6574df/46f1db2f-ab96-49bf-97d3-484c61dc423b.jpg",
+          "dimensions": {
+           "width": 1710,
+           "height": 1400
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-855",
+          "name": "Möbel und Wohnen"
+         },
+         {
+          "id": "DE-49940538",
+          "name": "Marken Möbel und Wohnen"
+         },
+         {
+          "id": "DE-128822602",
+          "name": "Livarno"
+         }
+        ]
+       },
+       {
+        "name": "Feinbiber­ Bettwäsche",
+        "brandName": "Livarno",
+        "description": [
+         {
+          "paragraph": "Kissen: ca. 80 x 80 cm. Standardgröße: ca. 135 x 200 cm. Je Stück"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/8254acd3-e5c6-4a56-84a6-c6599a6574df/46f1db2f-ab96-49bf-97d3-484c61dc423b.jpg",
+          "dimensions": {
+           "width": 1710,
+           "height": 1400
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-855",
+          "name": "Möbel und Wohnen"
+         },
+         {
+          "id": "DE-49940538",
+          "name": "Marken Möbel und Wohnen"
+         },
+         {
+          "id": "DE-128822602",
+          "name": "Livarno"
+         }
+        ]
+       },
+       {
+        "name": "Pyjama",
+        "brandName": "Esmara/ Esmara Men",
+        "description": [
+         {
+          "paragraph": "Je Stück "
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/8254acd3-e5c6-4a56-84a6-c6599a6574df/46f1db2f-ab96-49bf-97d3-484c61dc423b.jpg",
+          "dimensions": {
+           "width": 1710,
+           "height": 1400
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-690",
+          "name": "Mode und Accessoires"
+         },
+         {
+          "id": "DE-48987009",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-104486363",
+          "name": "Marken Mode"
+         },
+         {
+          "id": "DE-43716499",
+          "name": "Esmara"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 7.99,
+        "min": 7.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": "Feinbiber Spannbettlaken"
+       },
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 12.99,
+        "min": 12.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": "Feinbiber­ Bettwäsche"
+       },
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 7.99,
+        "min": 7.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": "Pyjama"
+       },
+       {
+        "type": "REGULAR_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 11.99,
+        "min": 11.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": "Pyjama"
+       }
+      ],
+      "linkOuts": [
+       {
+        "label": "Herren Pyjama im Online-Shop!",
+        "intent": "OTHER",
+        "webUrl": "https://www.lidl.de/p/esmara-men-herren-pyjama/p100410210?utm_source=vermarkter&utm_medium=leaflet&utm_campaign=lf_d-lf-dhz_others_notset_wt_omc_d-lf-dhz_sl_280926-031026&utm_content=de=p100410210",
+        "mobileUrl": "https://www.lidl.de/p/esmara-men-herren-pyjama/p100410210?utm_source=vermarkter&utm_medium=leaflet&utm_campaign=lf_d-lf-dhz_others_notset_wt_omc_d-lf-dhz_sl_280926-031026&utm_content=de=p100410210"
+       },
+       {
+        "label": "Damen Pyjama im Online-Shop!",
+        "intent": "OTHER",
+        "webUrl": "https://www.lidl.de/p/esmara-damen-pyjama/p100409512?utm_source=vermarkter&utm_medium=leaflet&utm_campaign=lf_d-lf-dhz_others_notset_wt_omc_d-lf-dhz_sl_280926-031026&utm_content=de=p100409512",
+        "mobileUrl": "https://www.lidl.de/p/esmara-damen-pyjama/p100409512?utm_source=vermarkter&utm_medium=leaflet&utm_campaign=lf_d-lf-dhz_others_notset_wt_omc_d-lf-dhz_sl_280926-031026&utm_content=de=p100409512"
+       }
+      ],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  },
+  {
+   "number": 10,
+   "images": [],
+   "linkOuts": [],
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "8ac1741f-4223-4143-810f-43ea78d0e4f1",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/8ac1741f-4223-4143-810f-43ea78d0e4f1/main.jpg",
+      "parentContent": {
+       "id": "d6c82e39-5052-48b8-b8d0-814ec3babd87",
+       "legacyId": 2501269977,
+       "type": "static_brochure",
+       "page": {
+        "number": 10,
+        "area": {
+         "bottomRight": {
+          "x": 0.9916527,
+          "y": 0.35791543
+         },
+         "topLeft": {
+          "x": 0.624374,
+          "y": 0.040314652
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "All-in-One Drucker",
+        "brandName": "HP",
+        "description": [
+         {
+          "paragraph": "Typ „DeskJet 2710e“. Drucken, Kopieren, Scannen. Symbol-LCD-Display. WLAN für kabelloses Drucken. Papierzufuhr: 60 Blatt"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/8ac1741f-4223-4143-810f-43ea78d0e4f1/023b8c10-b53a-4911-af14-6098410fec66.jpg",
+          "dimensions": {
+           "width": 369,
+           "height": 314
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-291",
+          "name": "Computer und Software"
+         },
+         {
+          "id": "DE-98582909",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-329",
+          "name": "Drucker"
+         },
+         {
+          "id": "DE-35265294",
+          "name": "Multifunktionsdrucker"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 52.99,
+        "min": 52.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       },
+       {
+        "type": "RECOMMENDED_RETAIL_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 74.9,
+        "min": 74.9,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       },
+       {
+        "type": "OTHER",
+        "conditions": [],
+        "max": 0,
+        "min": 0,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": "3 Monate gratis drucken mit HP Instant Ink"
+       }
+      ],
+      "linkOuts": [
+       {
+        "label": "»DeskJet 2710e« All-in-One Drucker, mit Scan- und Kopierfunktion im Online-Shop!",
+        "intent": "OTHER",
+        "webUrl": "https://www.lidl.de/p/hp-deskjet-2710e-all-in-one-drucker-mit-scan-und-kopierfunktion/p100349872?utm_source=vermarkter&utm_medium=leaflet&utm_campaign=lf_d-lf-dhz_others_notset_wt_omc_d-lf-dhz_sl_280926-031026&utm_content=de=p100349872",
+        "mobileUrl": "https://www.lidl.de/p/hp-deskjet-2710e-all-in-one-drucker-mit-scan-und-kopierfunktion/p100349872?utm_source=vermarkter&utm_medium=leaflet&utm_campaign=lf_d-lf-dhz_others_notset_wt_omc_d-lf-dhz_sl_280926-031026&utm_content=de=p100349872"
+       }
+      ],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:59.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  },
+  {
+   "number": 14,
+   "images": [],
+   "linkOuts": [],
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "87d3d9cb-b55d-4736-98f8-bd1790159467",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/87d3d9cb-b55d-4736-98f8-bd1790159467/main.jpg",
+      "parentContent": {
+       "id": "d6c82e39-5052-48b8-b8d0-814ec3babd87",
+       "legacyId": 2501269977,
+       "type": "static_brochure",
+       "page": {
+        "number": 14,
+        "area": {
+         "bottomRight": {
+          "x": 0.66444075,
+          "y": 0.7207473
+         },
+         "topLeft": {
+          "x": 0.33722872,
+          "y": 0.49852508
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Tomatenketchup",
+        "brandName": "Heinz",
+        "description": [
+         {
+          "paragraph": "Je 1,17 l"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/87d3d9cb-b55d-4736-98f8-bd1790159467/8e1d2196-9617-4ed4-8575-6881157222c8.jpg",
+          "dimensions": {
+           "width": 106,
+           "height": 250
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-48989303",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-106949053",
+          "name": "Marken Lebensmittel"
+         },
+         {
+          "id": "DE-718096",
+          "name": "Heinz"
+         }
+        ]
+       },
+       {
+        "name": "Mayonnaise Das Original",
+        "brandName": "Heinz",
+        "description": [
+         {
+          "paragraph": "800 ml"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/87d3d9cb-b55d-4736-98f8-bd1790159467/c6030765-74ba-440c-a07a-4e96b82c2915.jpg",
+          "dimensions": {
+           "width": 437,
+           "height": 437
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-48989303",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-106949053",
+          "name": "Marken Lebensmittel"
+         },
+         {
+          "id": "DE-718096",
+          "name": "Heinz"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 3.49,
+        "min": 3.49,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "1 l = 2.98",
+        "description": "Tomatenketchup"
+       },
+       {
+        "type": "RECOMMENDED_RETAIL_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 6.49,
+        "min": 6.49,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": "Tomatenketchup"
+       },
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 3.49,
+        "min": 3.49,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "1 l = 4.36",
+        "description": "Mayonnaise"
+       },
+       {
+        "type": "RECOMMENDED_RETAIL_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 6.49,
+        "min": 6.49,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": "Mayonnaise"
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    },
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "d650e9ca-fbb2-4981-81ed-70d700203bd8",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/d650e9ca-fbb2-4981-81ed-70d700203bd8/main.jpg",
+      "discountLabel": {
+       "value": "1.00",
+       "type": "DISCOUNT_AMOUNT"
+      },
+      "parentContent": {
+       "id": "d6c82e39-5052-48b8-b8d0-814ec3babd87",
+       "legacyId": 2501269977,
+       "type": "static_brochure",
+       "page": {
+        "number": 14,
+        "area": {
+         "bottomRight": {
+          "x": 0.66444075,
+          "y": 0.93608654
+         },
+         "topLeft": {
+          "x": 0.33722872,
+          "y": 0.7207473
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Mixgetränk",
+        "brandName": "Jack Daniel's",
+        "description": [
+         {
+          "paragraph": "Versch. Sorten. 10 % vol; Je 0,33 l zzgl. 0.25 Pfand"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/d650e9ca-fbb2-4981-81ed-70d700203bd8/779e49b7-07d2-44f5-9b5a-27ab793a0a44.jpg",
+          "dimensions": {
+           "width": 102,
+           "height": 197
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/d650e9ca-fbb2-4981-81ed-70d700203bd8/b47d4d1e-6294-42c8-9b61-c3e73c37d5d3.jpg",
+          "dimensions": {
+           "width": 99,
+           "height": 189
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-105",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-48920851",
+          "name": "Getränke"
+         },
+         {
+          "id": "DE-142945659",
+          "name": "Alkoholische Getränke"
+         },
+         {
+          "id": "DE-248740075",
+          "name": "alkoholische Mixgetränke"
+         },
+         {
+          "id": "DE-413731977",
+          "name": "Longdrink"
+         },
+         {
+          "id": "DE-1432240057",
+          "name": "Whiskey-Cola"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 1.99,
+        "min": 1.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "1 l = 6.03",
+        "description": ""
+       },
+       {
+        "type": "REGULAR_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 2.99,
+        "min": 2.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  },
+  {
+   "number": 17,
+   "images": [],
+   "linkOuts": [],
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "715fda3e-edf2-4a0a-80b0-290ea0c1334e",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/715fda3e-edf2-4a0a-80b0-290ea0c1334e/main.jpg",
+      "parentContent": {
+       "id": "d6c82e39-5052-48b8-b8d0-814ec3babd87",
+       "legacyId": 2501269977,
+       "type": "static_brochure",
+       "page": {
+        "number": 17,
+        "area": {
+         "bottomRight": {
+          "x": 0.34056762,
+          "y": 0.93706983
+         },
+         "topLeft": {
+          "x": 0.006677796,
+          "y": 0.5014749
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "LICOR 43",
+        "description": [
+         {
+          "paragraph": "31 % vol, Je 0,7 l"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/715fda3e-edf2-4a0a-80b0-290ea0c1334e/1ab0c674-d4bd-4253-8153-4744b5e4d2b4.jpg",
+          "dimensions": {
+           "width": 307,
+           "height": 968
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-105",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-48920851",
+          "name": "Getränke"
+         },
+         {
+          "id": "DE-142945659",
+          "name": "Alkoholische Getränke"
+         },
+         {
+          "id": "DE-5943",
+          "name": "Likör"
+         },
+         {
+          "id": "DE-233379855",
+          "name": "Vanillelikör"
+         },
+         {
+          "id": "DE-106842981",
+          "name": "Licor 43"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 11.99,
+        "min": 11.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       },
+       {
+        "type": "RECOMMENDED_RETAIL_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 15.99,
+        "min": 15.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       },
+       {
+        "type": "OTHER",
+        "conditions": [],
+        "max": 0,
+        "min": 0,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": "Licor 43 kaufen H-Milch gratis dazu"
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:59.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  }
+ ]
+}
