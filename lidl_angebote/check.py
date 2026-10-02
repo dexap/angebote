@@ -7,7 +7,7 @@
 import argparse
 import re
 import sys
-from datetime import date
+from datetime import date, timedelta
 
 from . import kaufda, retailers, scraper
 
@@ -141,19 +141,20 @@ def main(argv=None):
 
     failed = False
     for key in args.retailer or sorted(retailers.RETAILERS):
-        try:
-            offers = scraper.scrape(args.date, config=retailers.get(key))["offers"]
-        except scraper.NoBrochureError as e:
-            print(f"{key}: {e}")
-            continue
-        problems = check_offers(offers)
-        if problems:
-            failed = True
-            print(f"{key}: {len(offers)} Angebote, {len(problems)} Probleme")
-            for p in problems[:30]:
-                print(f"  {p}")
-        else:
-            print(f"{key}: {len(offers)} Angebote, OK")
+        for label, days in ((key, 0), (f"{key}/next", 7)):  # aktuelle und nächste Woche
+            try:
+                offers = scraper.scrape(args.date + timedelta(days=days), config=retailers.get(key))["offers"]
+            except scraper.NoBrochureError as e:
+                print(f"{label}: {e}")
+                continue
+            problems = check_offers(offers)
+            if problems:
+                failed = True
+                print(f"{label}: {len(offers)} Angebote, {len(problems)} Probleme")
+                for p in problems[:30]:
+                    print(f"  {p}")
+            else:
+                print(f"{label}: {len(offers)} Angebote, OK")
     return 1 if failed else 0
 
 

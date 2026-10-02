@@ -2,9 +2,10 @@
 
 from .base import Retailer
 from .lidl import LIDL
+from .penny import PENNY
 from .rewe import REWE
 
-RETAILERS = {r.key: r for r in (LIDL, REWE)}
+RETAILERS = {r.key: r for r in (LIDL, REWE, PENNY)}
 
 
 def get(key):

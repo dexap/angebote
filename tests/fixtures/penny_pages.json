@@ -1,0 +1,506 @@
+{
+ "contents": [
+  {
+   "number": 0,
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "a24880b7-e55e-45a3-b2e9-72d510cec54e",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1050",
+       "name": "Penny",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/a24880b7-e55e-45a3-b2e9-72d510cec54e/main.jpg",
+      "parentContent": {
+       "id": "e8de9515-1a27-476d-a59d-6954b697b264",
+       "legacyId": 2501272466,
+       "type": "static_brochure",
+       "page": {
+        "number": 0,
+        "area": {
+         "bottomRight": {
+          "x": 0.9800337,
+          "y": 0.9433428
+         },
+         "topLeft": {
+          "x": 0.6560935,
+          "y": 0.6458923
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "XXL Toilettenpapier",
+        "brandName": "Happy End",
+        "description": [
+         {
+          "paragraph": "3-lagig je 20 x 200 Blatt"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/a24880b7-e55e-45a3-b2e9-72d510cec54e/459e003a-47a0-40d0-8381-ed33de4eaf4b.jpg",
+          "dimensions": {
+           "width": 530,
+           "height": 278
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-447",
+          "name": "Drogerie und Haushalt"
+         },
+         {
+          "id": "DE-448",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-142239397",
+          "name": "Drogerie"
+         },
+         {
+          "id": "DE-457",
+          "name": "Körperpflege"
+         },
+         {
+          "id": "DE-465",
+          "name": "Toilettenpapier"
+         },
+         {
+          "id": "DE-104443994",
+          "name": "Toilettenpapier 3-lagig"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 6.99,
+        "min": 6.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:59.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    },
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "844fccbc-6acc-4971-982f-01ccd87c27d8",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1050",
+       "name": "Penny",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/844fccbc-6acc-4971-982f-01ccd87c27d8/main.jpg",
+      "parentContent": {
+       "id": "e8de9515-1a27-476d-a59d-6954b697b264",
+       "legacyId": 2501272466,
+       "type": "static_brochure",
+       "page": {
+        "number": 0,
+        "area": {
+         "bottomRight": {
+          "x": 0.34056762,
+          "y": 0.9433428
+         },
+         "topLeft": {
+          "x": 0.03672788,
+          "y": 0.6458923
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Fruchtsecco oder Sekt",
+        "brandName": "Rotkäppchen",
+        "description": [
+         {
+          "paragraph": "Versch. Sorten je 0,75 l"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/844fccbc-6acc-4971-982f-01ccd87c27d8/745c1edd-a520-4a9f-8d25-4c570141a610.jpg",
+          "dimensions": {
+           "width": 140,
+           "height": 470
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/844fccbc-6acc-4971-982f-01ccd87c27d8/df499343-9c4e-4cfd-8049-405f8f8d7159.jpg",
+          "dimensions": {
+           "width": 142,
+           "height": 509
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-105",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-48920851",
+          "name": "Getränke"
+         },
+         {
+          "id": "DE-142945659",
+          "name": "Alkoholische Getränke"
+         },
+         {
+          "id": "DE-104408549",
+          "name": "Schaumwein"
+         },
+         {
+          "id": "DE-5938",
+          "name": "Sekt"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SPECIAL_PRICE",
+        "conditions": [
+         {
+          "other": "mit PENNY App"
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 2.88,
+        "min": 2.88,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "1 l = 3.84",
+        "description": ""
+       },
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 3.29,
+        "min": 3.29,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "1 l = 4.39",
+        "description": ""
+       },
+       {
+        "type": "RECOMMENDED_RETAIL_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 4.99,
+        "min": 4.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:59.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    },
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "5f788f62-73dc-4ca4-81c1-5eeb393c18a3",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1050",
+       "name": "Penny",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/5f788f62-73dc-4ca4-81c1-5eeb393c18a3/main.jpg",
+      "parentContent": {
+       "id": "e8de9515-1a27-476d-a59d-6954b697b264",
+       "legacyId": 2501272466,
+       "type": "static_brochure",
+       "page": {
+        "number": 0,
+        "area": {
+         "bottomRight": {
+          "x": 0.9851826,
+          "y": 0.52916104
+         },
+         "topLeft": {
+          "x": 0.6261836,
+          "y": 0.2923224
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Deutscher Eisbergsalat",
+        "description": [
+         {
+          "paragraph": "Kl. I, je Stück"
+         }
+        ],
+        "images": [],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-105",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-48921103",
+          "name": "Lebensmittel"
+         },
+         {
+          "id": "DE-118",
+          "name": "Gemüse"
+         },
+         {
+          "id": "DE-1284",
+          "name": "Salat"
+         },
+         {
+          "id": "DE-2180014",
+          "name": "Eisbergsalat"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 0.85,
+        "min": 0.85,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:59.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  },
+  {
+   "number": 1,
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "2fc587c0-8fb1-444c-90d6-d6e3d201064e",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1050",
+       "name": "Penny",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/2fc587c0-8fb1-444c-90d6-d6e3d201064e/main.jpg",
+      "discountLabel": {
+       "value": "0.10",
+       "type": "DISCOUNT_AMOUNT"
+      },
+      "parentContent": {
+       "id": "e8de9515-1a27-476d-a59d-6954b697b264",
+       "legacyId": 2501272466,
+       "type": "static_brochure",
+       "page": {
+        "number": 1,
+        "area": {
+         "bottomRight": {
+          "x": 0.99499166,
+          "y": 0.6770538
+         },
+         "topLeft": {
+          "x": 0.41402337,
+          "y": 0.4674221
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Cola oder Limo",
+        "brandName": "COMET",
+        "description": [
+         {
+          "paragraph": "Versch. Sorten je 0,33 l zzgl. 0.25 Pfand"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/2fc587c0-8fb1-444c-90d6-d6e3d201064e/88094800-6be9-4346-8d84-ac1a3afd15e9.jpg",
+          "dimensions": {
+           "width": 131,
+           "height": 337
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/2fc587c0-8fb1-444c-90d6-d6e3d201064e/c0ea5c34-1015-481a-8c7e-e42b7fd791ba.jpg",
+          "dimensions": {
+           "width": 129,
+           "height": 332
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/2fc587c0-8fb1-444c-90d6-d6e3d201064e/0d6b44e6-d94d-4ae6-bc2e-a81e6ba8d442.jpg",
+          "dimensions": {
+           "width": 129,
+           "height": 332
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/2fc587c0-8fb1-444c-90d6-d6e3d201064e/922aafea-7d95-426e-8874-a0d75afe3fa0.jpg",
+          "dimensions": {
+           "width": 129,
+           "height": 332
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/2fc587c0-8fb1-444c-90d6-d6e3d201064e/afe44b44-59b2-4edc-83b6-aa3f81ee59b4.jpg",
+          "dimensions": {
+           "width": 129,
+           "height": 332
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-105",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-48920851",
+          "name": "Getränke"
+         },
+         {
+          "id": "DE-50523564",
+          "name": "Softdrinks"
+         },
+         {
+          "id": "DE-26031",
+          "name": "Limonade"
+         },
+         {
+          "id": "DE-330648062",
+          "name": "Koffeinhaltige Limonade"
+         },
+         {
+          "id": "DE-1497",
+          "name": "Cola"
+         },
+         {
+          "id": "DE-254648477",
+          "name": "Cherry Cola"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [
+         {
+          "other": " "
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 0.29,
+        "min": 0.29,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "1 l = 0.88",
+        "description": ""
+       },
+       {
+        "type": "REGULAR_PRICE",
+        "conditions": [
+         {
+          "other": " "
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 0.39,
+        "min": 0.39,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:59:59.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  }
+ ]
+}

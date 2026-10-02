@@ -131,7 +131,7 @@ def test_raise_on_problems():
     check.ensure_valid([GOOD])
 
 
-@pytest.mark.parametrize("key", ["lidl", "rewe"])
+@pytest.mark.parametrize("key", ["lidl", "rewe", "penny"])
 def test_scraped_offers_satisfy_schema(fake_fetch, key):
     offers = scraper.scrape(date(2026, 10, 2), fetch=fake_fetch, config=retailers.get(key))["offers"]
     assert offers
@@ -142,7 +142,7 @@ def test_cli_reports_ok_and_failure(monkeypatch, fake_fetch, capsys):
     monkeypatch.setattr(scraper, "http_get", fake_fetch)
     assert check.main(["--date", "2026-10-02"]) == 0
     out = capsys.readouterr().out
-    assert "lidl" in out and "rewe" in out and "OK" in out
+    assert "lidl:" in out and "lidl/next:" in out and "rewe:" in out and "penny:" in out and "OK" in out
 
     monkeypatch.setattr(check, "check_offers", lambda offers: ["x: price kaputt"])
     assert check.main(["--date", "2026-10-02"]) == 1

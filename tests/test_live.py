@@ -22,7 +22,7 @@ def test_live_scrape_returns_food_offers():
 def test_live_rewe_national_offers_satisfy_schema():
     from lidl_angebote import check, retailers
 
-    for key in ("lidl", "rewe"):
+    for key in ("lidl", "rewe", "penny"):
         result = scraper.scrape(date.today(), config=retailers.get(key))
         assert result["count"] > 20
         assert check.check_offers(result["offers"]) == []

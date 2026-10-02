@@ -3,6 +3,7 @@
 Wochenangebote von [kaufda.de](https://www.kaufda.de) als JSON – direkt aus den JSON-Antworten der Seite, ohne PDF/OCR. Nur Python-Standardbibliothek.
 
 - **Lidl**: nur Lebensmittel & Getränke.
+- **Penny**: alle Kategorien, Sonderpreis = App-Preis ([kaufda](https://www.kaufda.de/Geschaefte/Penny-Markt)).
 - **REWE**: alle Kategorien (Lebensmittel, Drogerie, Haushalt, …), nur *nationale* Angebote – kaufda führt je Markt einen Prospekt „Dein Markt“, übernommen wird, was in allen Markt-Prospekten steht. (rewe.de selbst ist per Bot-Schutz gesperrt und wird nicht gescrapt.)
 
 Als Claude-Code-Skill: [`.claude/skills/lidl-angebote/SKILL.md`](.claude/skills/lidl-angebote/SKILL.md)
@@ -15,7 +16,7 @@ python3 -m lidl_angebote --retailer rewe # -> data/rewe_<Jahr>-KW<Woche>.json
 python3 -m lidl_angebote --help
 ```
 
-Optionen: `--retailer lidl|rewe`, `--date YYYY-MM-DD`, `--next` (Woche danach), `--output PATH` (`-` = stdout), `--no-drinks`, `--include-long-running`.
+Optionen: `--retailer lidl|rewe|penny`, `--date YYYY-MM-DD`, `--next` (Woche danach), `--output PATH` (`-` = stdout), `--no-drinks`, `--include-long-running`.
 
 ## JSON-API
 
@@ -26,6 +27,7 @@ Der Workflow `.github/workflows/pages.yml` baut täglich (und bei jedem Push auf
 | `https://dexap.github.io/angebote/lidl.json` | Lidl, aktuelle Woche (`lidl/` = dasselbe als `index.html`) |
 | `…/lidl/next.json` | Lidl, nächste Woche |
 | `…/rewe.json`, `…/rewe/next.json` | REWE (national), aktuelle / nächste Woche |
+| `…/penny.json`, `…/penny/next.json` | Penny, aktuelle / nächste Woche |
 | `…/all.json`, `…/all/next.json` | alle Händler zusammen (Feld `retailer` unterscheidet) |
 
 Einmalig nötig: *Settings → Pages → Build and deployment → Source: GitHub Actions*.

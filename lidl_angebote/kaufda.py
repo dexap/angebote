@@ -117,17 +117,19 @@ def parse_unit_price(text):
     text = (text or "").strip()
     per_unit = _PER_UNIT.match(text)  # "36.99/kg", "-.57/Stk."
     if per_unit:
-        return {"amount": _number(per_unit.group(1)), "unit": per_unit.group(2), "quantity": 1}
+        try:
+            return {"amount": _number(per_unit.group(1)), "unit": per_unit.group(2), "quantity": 1}
+        except ValueError:
+            return None
     match = _UNIT_PRICE.match(text)
     if not match:
         return None
     quantity, unit, amount = match.groups()
-    quantity = _number(quantity)
-    return {
-        "amount": _number(amount),
-        "unit": unit,
-        "quantity": int(quantity) if quantity == int(quantity) else quantity,
-    }
+    try:
+        quantity, amount = _number(quantity), _number(amount)
+    except ValueError:  # kaputte Quelle wie "4.955.74": lieber kein Grundpreis als ein Abbruch
+        return None
+    return {"amount": amount, "unit": unit, "quantity": int(quantity) if quantity == int(quantity) else quantity}
 
 
 def _flat_path(category_paths):
@@ -175,6 +177,7 @@ def _offer_validity(content, brochure):
 
 
 def _record(content, product, deals, index, multi, validity, retailer):
+    deals = retailers.get(retailer).prepare_deals(deals)
     sales = _first(deals, "SALES_PRICE")
     main = sales or _first(deals, "SPECIAL_PRICE")
     if not main:

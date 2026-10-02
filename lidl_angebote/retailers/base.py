@@ -18,6 +18,8 @@ class Retailer:
     common_only: bool  # nur Angebote, die in allen Markt-Prospekten stehen ("national")
     # (price, deals) -> (special_price | None, special_price_condition | None, extras)
     special_price: Callable
+    # deals -> deals: händlerspezifisch zurechtrücken, bevor Preise gelesen werden (Standard: unverändert)
+    prepare_deals: Callable = lambda deals: deals
 
 
 def first_deal(deals, deal_type):
@@ -30,6 +32,23 @@ def conditions(deal):
         return []
     texts = [c["other"].strip() for c in deal.get("conditions", []) if c.get("other", "").strip()]
     return [t[0].upper() + t[1:] for t in texts if t.lower() != "je"]
+
+
+def card_price(price, deals, normalize=lambda condition: condition):
+    """Sonderpreis für Kundenkarte/App: SPECIAL_PRICE neben dem normalen SALES_PRICE.
+
+    -> (special_price | None, condition | None, notes). Ein SPECIAL_PRICE ohne SALES_PRICE ist der
+    Angebotspreis selbst, ein Wert >= price ein Mengenpreis ("4 für 2 €") - beides kein Sonderpreis.
+    """
+    sales, special = first_deal(deals, "SALES_PRICE"), first_deal(deals, "SPECIAL_PRICE")
+    extras = other_texts(deals)
+    if not (sales and special):
+        return None, None, extras
+    condition = normalize(", ".join(conditions(special))) or "Sonderpreis"
+    if special["min"] >= price:
+        text = f"{condition} {special['min']:.2f} €".replace(".", ",")
+        return None, None, [text] + extras
+    return special["min"], condition, extras
 
 
 def other_texts(deals):

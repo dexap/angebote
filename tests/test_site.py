@@ -36,7 +36,7 @@ def test_next_week_offers(built):
 def test_missing_brochure_gives_empty_list(tmp_path, fake_fetch):
     # KW49: kein Wochenprospekt im Fixture
     site.build_site(tmp_path, today=date(2026, 12, 1), fetch=fake_fetch)
-    for path in ("lidl.json", "lidl/next.json", "rewe.json", "all.json"):
+    for path in ("lidl.json", "lidl/next.json", "rewe.json", "penny.json", "all.json"):
         assert _read(tmp_path / path) == []
 
 
@@ -52,7 +52,7 @@ def test_network_error_is_not_published_as_empty(tmp_path):
 def test_static_files(built):
     assert (built / ".nojekyll").exists()
     index = (built / "index.html").read_text(encoding="utf-8")
-    for path in ("lidl.json", "lidl/next.json", "rewe.json", "rewe/next.json", "all.json", "all/next.json"):
+    for path in ("lidl.json", "lidl/next.json", "rewe.json", "rewe/next.json", "penny.json", "penny/next.json", "all.json", "all/next.json"):
         assert path in index
 
 
@@ -66,17 +66,21 @@ def test_rewe_endpoints(built):
 
 def test_all_endpoint_merges_retailers(built):
     merged = _read(built / "all.json")
-    assert len(merged) == len(_read(built / "lidl.json")) + len(_read(built / "rewe.json"))
-    assert {o["retailer"] for o in merged} == {"lidl", "rewe"}
+    assert len(merged) == sum(len(_read(built / f"{k}.json")) for k in ("lidl", "rewe", "penny"))
+    assert {o["retailer"] for o in merged} == {"lidl", "rewe", "penny"}
     ids = [o["id"] for o in merged]
     assert len(ids) == len(set(ids))
     assert _read(built / "all" / "index.html") == merged
-    assert len(_read(built / "all" / "next.json")) == len(_read(built / "lidl" / "next.json"))
+    assert len(_read(built / "all" / "next.json")) == sum(len(_read(built / k / "next.json")) for k in ("lidl", "rewe", "penny"))
 
 
 def test_each_retailer_page_fetched_once(built, fake_fetch):
     urls = [u for u in fake_fetch.calls if "Geschaefte" in u]
-    assert sorted(urls) == ["https://www.kaufda.de/Geschaefte/Lidl", "https://www.kaufda.de/Geschaefte/REWE"]
+    assert sorted(urls) == [
+        "https://www.kaufda.de/Geschaefte/Lidl",
+        "https://www.kaufda.de/Geschaefte/Penny-Markt",
+        "https://www.kaufda.de/Geschaefte/REWE",
+    ]
 
 
 def test_invalid_data_is_not_published(tmp_path, fake_fetch, monkeypatch):

@@ -34,6 +34,14 @@ def rewe_retailer_html():
 
 
 @pytest.fixture
+def penny_retailer_html():
+    return (FIXTURES / "penny_retailer_page.html").read_text(encoding="utf-8")
+
+
+PENNY_WEEK = "e8de9515-1a27-476d-a59d-6954b697b264"
+
+
+@pytest.fixture
 def rewe_pages():
     """Zwei Märkte: je 3 gemeinsame Angebote (Chips, Pepsi, Haarspray) plus marktspezifische."""
     return {
@@ -43,7 +51,7 @@ def rewe_pages():
 
 
 @pytest.fixture
-def fake_fetch(retailer_html, brochure_pages, brochure_pages_next, rewe_retailer_html, rewe_pages):
+def fake_fetch(retailer_html, brochure_pages, brochure_pages_next, rewe_retailer_html, rewe_pages, penny_retailer_html):
     """Ersetzt HTTP: liefert Fixtures je nach URL und merkt sich die Aufrufe."""
     calls = []
 
@@ -53,6 +61,10 @@ def fake_fetch(retailer_html, brochure_pages, brochure_pages_next, rewe_retailer
             return retailer_html
         if url.startswith("https://www.kaufda.de/Geschaefte/REWE"):
             return rewe_retailer_html
+        if url.startswith("https://www.kaufda.de/Geschaefte/Penny-Markt"):
+            return penny_retailer_html
+        if url.startswith(f"https://content-viewer-be.kaufda.de/v1/brochures/{PENNY_WEEK}/"):
+            return (FIXTURES / "penny_pages.json").read_text(encoding="utf-8")
         for market, text in rewe_pages.items():
             if url.startswith(f"https://content-viewer-be.kaufda.de/v1/brochures/{market}/"):
                 return text

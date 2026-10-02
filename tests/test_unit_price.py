@@ -21,6 +21,6 @@ def test_parse_unit_price(text, expected):
     assert kaufda.parse_unit_price(text) == expected
 
 
-@pytest.mark.parametrize("text", [None, "", "je Packung", "Preis ohne Einheit", "1 kg = 6.32/3.95", "1 kg = ab 8.13", "1kg=ab 4.26"])
+@pytest.mark.parametrize("text", [None, "", "je Packung", "Preis ohne Einheit", "1 kg = 6.32/3.95", "1 kg = ab 8.13", "1kg=ab 4.26", "1 kg = 4.955.74", "1 kg = 1,2,3", "1 kg = 4.95."])
 def test_parse_unit_price_unparseable_is_none(text):
     assert kaufda.parse_unit_price(text) is None
