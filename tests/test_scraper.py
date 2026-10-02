@@ -26,9 +26,9 @@ def test_scrape_requests_brochure_pages_with_location(fake_fetch):
     ]
 
 
-def test_scrape_offers_sorted_by_page_then_name(fake_fetch):
+def test_scrape_offers_sorted_by_category_then_name(fake_fetch):
     offers = scraper.scrape(date(2026, 10, 2), fetch=fake_fetch)["offers"]
-    keys = [(o["page"], o["name"]) for o in offers]
+    keys = [(o.get("category_group", ""), o["name"]) for o in offers]
     assert keys == sorted(keys)
 
 
@@ -96,3 +96,17 @@ def test_cli_fails_cleanly_without_brochures(tmp_path, monkeypatch, fake_fetch, 
     exit_code = cli.main(["--date", "2026-12-01", "--output", str(tmp_path / "x.json")])
     assert exit_code == 1
     assert "Kein" in capsys.readouterr().err
+
+
+def test_default_output_path_per_retailer():
+    assert cli.default_output_path(date(2026, 10, 2), "rewe") == "data/rewe_2026-KW40.json"
+
+
+def test_cli_retailer_rewe(tmp_path, monkeypatch, fake_fetch):
+    monkeypatch.setattr(scraper, "http_get", fake_fetch)
+    out = tmp_path / "rewe.json"
+
+    assert cli.main(["--retailer", "rewe", "--date", "2026-10-02", "--output", str(out)]) == 0
+
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert data["retailer"] == "REWE" and data["count"] == 3

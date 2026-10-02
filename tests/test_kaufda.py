@@ -125,9 +125,10 @@ def test_offer_with_regular_price_and_discount(brochure_pages):
     o = _by_name(_offers(brochure_pages), "Tafelschokolade Alpenmilch")
     assert o["price"] == 0.39
     assert o["regular_price"] == 0.79
-    assert o["uvp"] is None
+    assert "uvp" not in o  # uvp ist in regular_price aufgegangen
     assert o["discount_percent"] == 51
-    assert o["base_price"] == "1 kg = 3.90"
+    assert "base_price" not in o
+    assert o["unit_price"] == {"amount": 3.9, "unit": "kg", "quantity": 1}
     assert o["brand"] == "FIN CARRÉ"
     assert o["description"] == "Je 100 g"
     assert o["is_drink"] is False
@@ -136,31 +137,19 @@ def test_offer_with_regular_price_and_discount(brochure_pages):
 def test_offer_record_has_all_fields(brochure_pages):
     o = _by_name(_offers(brochure_pages), "Kiwi, lose")
     assert o == {
-        "id": o["offer_id"],
-        "offer_id": o["offer_id"],
+        "retailer": "lidl",
+        "id": o["id"],
         "name": "Kiwi, lose",
         "brand": "Zespri",
         "description": "Neuseeland Green Kiwifruit, Klasse I",
         "price": 0.44,
         "regular_price": 0.49,
-        "uvp": None,
-        "special_price": None,
-        "special_price_condition": None,
         "discount_percent": 10,
-        "base_price": None,
-        "conditions": [],
-        "extras": [],
-        "category": "Zespri",
-        "category_path": ["Lebensmittel und Getränke", "Marken", "Marken Lebensmittel", "Zespri"],
+        "category_group": "Lebensmittel und Getränke",
         "is_drink": False,
         "valid_from": "2026-09-28",
         "valid_until": "2026-10-02",
-        "brochure_id": WEEKLY,
-        "brochure_title": "LIDL LOHNT SICH",
-        "page": 3,
-        "image": o["image"],
     }
-    assert o["image"].startswith("https://content-media.bonial.biz/")
 
 
 def test_lidl_plus_special_price(brochure_pages):
@@ -169,16 +158,16 @@ def test_lidl_plus_special_price(brochure_pages):
     assert o["special_price"] == 0.79
     assert o["special_price_condition"] == "Mit Lidl Plus"
     assert o["regular_price"] == 1.11
-    assert o["conditions"] == ["Je Stück"]
+    assert o["notes"] == ["Je Stück"]
 
 
-def test_uvp_and_extras(brochure_pages):
+def test_uvp_becomes_regular_price_and_extras_become_notes(brochure_pages):
     o = _by_name(_offers(brochure_pages), "LICOR 43")
     assert o["price"] == 11.99
-    assert o["uvp"] == 15.99
-    assert o["regular_price"] is None
+    assert o["regular_price"] == 15.99
+    assert "uvp" not in o
     assert o["discount_percent"] == 25
-    assert o["extras"] == ["Licor 43 kaufen H-Milch gratis dazu"]
+    assert o["notes"] == ["Licor 43 kaufen H-Milch gratis dazu"]
     assert o["is_drink"] is True
 
 
@@ -186,11 +175,11 @@ def test_multi_product_offer_is_split_per_product(brochure_pages):
     offers = _offers(brochure_pages)
     ketchup = _by_name(offers, "Tomatenketchup")
     mayo = _by_name(offers, "Mayonnaise Das Original")
-    assert ketchup["offer_id"] == mayo["offer_id"]
+    assert ketchup["id"].split("#")[0] == mayo["id"].split("#")[0]
     assert ketchup["id"] != mayo["id"]
-    assert ketchup["base_price"] == "1 l = 2.98"
-    assert mayo["base_price"] == "1 l = 4.36"
-    assert ketchup["uvp"] == mayo["uvp"] == 6.49
+    assert ketchup["unit_price"] == {"amount": 2.98, "unit": "l", "quantity": 1}
+    assert mayo["unit_price"] == {"amount": 4.36, "unit": "l", "quantity": 1}
+    assert ketchup["regular_price"] == mayo["regular_price"] == 6.49
 
 
 def test_invalid_offer_validity_falls_back_to_brochure(brochure_pages):
@@ -208,3 +197,47 @@ def test_offers_without_price_are_skipped(brochure_pages):
 def test_offers_outside_week_are_skipped(brochure_pages):
     offers = kaufda.parse_offers(brochure_pages, BROCHURE, week=(date(2026, 10, 5), date(2026, 10, 11)))
     assert offers == []
+
+
+def test_parse_offers_non_food_only_when_requested(brochure_pages):
+    food = _offers(brochure_pages)
+    everything = _offers(brochure_pages, food_only=False)
+    assert len(everything) > len(food)
+    assert {o["category_group"] for o in everything} - {"Lebensmittel und Getränke"}
+
+
+def test_parse_offers_sets_retailer_key(brochure_pages):
+    assert {o["retailer"] for o in _offers(brochure_pages, retailer="rewe")} == {"rewe"}
+
+
+def test_empty_values_are_omitted_from_records(brochure_pages):
+    for o in _offers(brochure_pages, food_only=False):
+        assert all(v not in (None, "", [], {}) for v in o.values()), o
+
+
+def test_trivial_je_condition_is_dropped(brochure_pages):
+    for o in _offers(brochure_pages, food_only=False):
+        assert all(c.strip().lower() != "je" for c in o.get("notes", []))
+
+
+def test_removed_fields_are_not_emitted(brochure_pages):
+    for o in _offers(brochure_pages, food_only=False):
+        assert not {"offer_id", "uvp", "conditions", "extras"} & set(o)
+
+
+def test_unparseable_base_price_is_dropped(brochure_pages):
+    pages = brochure_pages
+    for page in pages["contents"]:
+        for item in page["offers"]:
+            for deal in (item.get("content") or {}).get("deals", []):
+                if deal.get("priceByBaseUnit"):
+                    deal["priceByBaseUnit"] = "1 kg = ab 8.13"
+    offers = _offers(pages)
+    assert offers and all("unit_price" not in o and "base_price" not in o for o in offers)
+
+
+def test_notes_combine_conditions_and_extras_without_duplicates(brochure_pages):
+    o = _by_name(_offers(brochure_pages), "Granatapfel")
+    assert o["notes"] == ["Je Stück"]
+    licor = _by_name(_offers(brochure_pages), "LICOR 43")
+    assert licor["notes"] == ["Licor 43 kaufen H-Milch gratis dazu"]

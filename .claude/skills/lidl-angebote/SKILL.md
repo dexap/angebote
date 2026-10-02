@@ -40,19 +40,20 @@ Danach dem Nutzer kurz berichten: Anzahl Angebote, Prospekt + Gültigkeit, Pfad 
   "retailer": "Lidl",
   "week": {"year": 2026, "number": 40, "start": "2026-09-28", "end": "2026-10-04"},
   "brochures": [{"id": "…", "title": "LIDL LOHNT SICH", "valid_from": "2026-09-28", "valid_until": "2026-10-02"}],
-  "count": 240,
+  "count": 255,
   "offers": [{
-    "name": "Tafelschokolade Alpenmilch", "brand": "FIN CARRÉ", "description": "Je 100 g",
-    "price": 0.39, "regular_price": 0.79, "uvp": null, "discount_percent": 51,
-    "special_price": null, "special_price_condition": null,
-    "base_price": "1 kg = 3.90", "conditions": [], "extras": [],
-    "category": "Fairtrade", "category_path": ["Lebensmittel und Getränke", "…"], "is_drink": false,
-    "valid_from": "2026-09-28", "valid_until": "2026-10-02", "page": 7, "image": "https://…"
+    "retailer": "lidl", "id": "…", "name": "Tafelschokolade Alpenmilch", "brand": "FIN CARRÉ",
+    "description": "Je 100 g", "price": 0.39, "regular_price": 0.79, "discount_percent": 51,
+    "unit_price": {"amount": 3.9, "unit": "kg", "quantity": 1},
+    "category_group": "Lebensmittel und Getränke", "is_drink": false,
+    "valid_from": "2026-09-28", "valid_until": "2026-10-02"
   }]
 }
 ```
 
-Preisfelder aus `deals[].type`: `SALES_PRICE` → `price`, `REGULAR_PRICE` → `regular_price` (Streichpreis), `RECOMMENDED_RETAIL_PRICE` → `uvp`, `SPECIAL_PRICE` → `special_price` (meist „Mit Lidl Plus“), `OTHER` → `extras`.
+Leere Felder fehlen (kein `null`). Das Schema aller Händler steht in `SCHEMA.md`, geprüft von `python3 -m lidl_angebote.check`. `--retailer rewe` liefert REWE im selben Format.
+
+Preisfelder aus `deals[].type`: `SALES_PRICE` → `price`, `REGULAR_PRICE` → `regular_price` (Streichpreis, sonst `RECOMMENDED_RETAIL_PRICE`), `SPECIAL_PRICE` → `special_price` (meist „Mit Lidl Plus“), `OTHER` → `notes`.
 
 ## Wenn es bricht
 

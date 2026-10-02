@@ -1,0 +1,452 @@
+{
+ "contents": [
+  {
+   "number": 0,
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "03523176-4d16-4b33-a35d-d3a8597d64cb",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1062",
+       "name": "REWE",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/03523176-4d16-4b33-a35d-d3a8597d64cb/main.jpg",
+      "parentContent": {
+       "id": "70235f32-cc7a-44b7-a585-8e8c3bbec178",
+       "legacyId": 2501275875,
+       "type": "static_brochure",
+       "page": {
+        "number": 0,
+        "area": {
+         "bottomRight": {
+          "x": 0.33555928,
+          "y": 0.75637394
+         },
+         "topLeft": {
+          "x": 0.02003339,
+          "y": 0.5259679
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Chips",
+        "brandName": "Pringles",
+        "description": [
+         {
+          "paragraph": "je 165-g-Dose"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/03523176-4d16-4b33-a35d-d3a8597d64cb/bfdc3109-c6bf-42a9-9b46-a5c0387d399f.jpg",
+          "dimensions": {
+           "width": 130,
+           "height": 381
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/03523176-4d16-4b33-a35d-d3a8597d64cb/0996e498-b0c6-4835-ad09-d75163860ee4.jpg",
+          "dimensions": {
+           "width": 117,
+           "height": 381
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-48989303",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-106949053",
+          "name": "Marken Lebensmittel"
+         },
+         {
+          "id": "DE-14370",
+          "name": "Pringles"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 1.49,
+        "min": 1.49,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "(1 kg = 9.03/8.05)",
+        "description": ""
+       },
+       {
+        "type": "OTHER",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 0,
+        "min": 0,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": "0,10 € Bonus"
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:00:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    },
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "87a28a06-aa49-49c4-9497-efe7563de69f",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1062",
+       "name": "REWE",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/87a28a06-aa49-49c4-9497-efe7563de69f/main.jpg",
+      "parentContent": {
+       "id": "70235f32-cc7a-44b7-a585-8e8c3bbec178",
+       "legacyId": 2501275875,
+       "type": "static_brochure",
+       "page": {
+        "number": 0,
+        "area": {
+         "bottomRight": {
+          "x": 0.6627713,
+          "y": 0.9763928
+         },
+         "topLeft": {
+          "x": 0.33555928,
+          "y": 0.75637394
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Pepsi",
+        "description": [
+         {
+          "paragraph": "versch. Sorten, koffeinhaltig 1,25-l-Fl. zzgl. 0.25 Pfand"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/87a28a06-aa49-49c4-9497-efe7563de69f/cfcac8d7-57a7-455f-80fb-9a29020a1e47.jpg",
+          "dimensions": {
+           "width": 123,
+           "height": 432
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/87a28a06-aa49-49c4-9497-efe7563de69f/9343fe22-37d9-446d-b6a9-95adccd87874.jpg",
+          "dimensions": {
+           "width": 123,
+           "height": 432
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-105",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-48920851",
+          "name": "Getränke"
+         },
+         {
+          "id": "DE-50523564",
+          "name": "Softdrinks"
+         },
+         {
+          "id": "DE-254645365",
+          "name": "Softdrinkmarken"
+         },
+         {
+          "id": "DE-5934",
+          "name": "Pepsi"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [
+         {
+          "other": "je"
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 0.79,
+        "min": 0.79,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "(1 l = 0.63)",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:00:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    },
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "11f513c3-9306-4082-a16c-1478ffef938e",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1062",
+       "name": "REWE",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/11f513c3-9306-4082-a16c-1478ffef938e/main.jpg",
+      "parentContent": {
+       "id": "70235f32-cc7a-44b7-a585-8e8c3bbec178",
+       "legacyId": 2501275875,
+       "type": "static_brochure",
+       "page": {
+        "number": 0,
+        "area": {
+         "bottomRight": {
+          "x": 0.9766277,
+          "y": 0.75637394
+         },
+         "topLeft": {
+          "x": 0.6627713,
+          "y": 0.5259679
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Rinder-Rouladen, -Braten oder -Gulasch",
+        "brandName": "Chateau Bœuf",
+        "description": [
+         {
+          "paragraph": "Jungbullenfleisch aus der Keule 100 g"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/11f513c3-9306-4082-a16c-1478ffef938e/9b51fd2b-3a6f-43d9-aa98-4053676d274f.jpg",
+          "dimensions": {
+           "width": 399,
+           "height": 278
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-105",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-48921103",
+          "name": "Lebensmittel"
+         },
+         {
+          "id": "DE-136",
+          "name": "Fleisch"
+         },
+         {
+          "id": "DE-10338",
+          "name": "Rindfleisch"
+         },
+         {
+          "id": "DE-103750662",
+          "name": "Rindergulasch"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [
+         {
+          "other": "Je"
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 1.89,
+        "min": 1.89,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:00:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  },
+  {
+   "number": 9,
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "2631180d-8e4c-47d6-aaea-74febd64bb57",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1062",
+       "name": "REWE",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/2631180d-8e4c-47d6-aaea-74febd64bb57/main.jpg",
+      "parentContent": {
+       "id": "70235f32-cc7a-44b7-a585-8e8c3bbec178",
+       "legacyId": 2501275875,
+       "type": "static_brochure",
+       "page": {
+        "number": 9,
+        "area": {
+         "bottomRight": {
+          "x": 0.33555928,
+          "y": 0.97544855
+         },
+         "topLeft": {
+          "x": 0.026711185,
+          "y": 0.7554296
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Haarspray",
+        "brandName": "Syoss",
+        "description": [
+         {
+          "paragraph": "versch. Sorten 400-ml-Dose"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/2631180d-8e4c-47d6-aaea-74febd64bb57/584404e3-2c6d-4071-a1bb-9c2ae624d0ff.jpg",
+          "dimensions": {
+           "width": 106,
+           "height": 457
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/2631180d-8e4c-47d6-aaea-74febd64bb57/b9a64eb4-1eed-4336-9524-93b971932f3f.jpg",
+          "dimensions": {
+           "width": 106,
+           "height": 457
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-447",
+          "name": "Drogerie und Haushalt"
+         },
+         {
+          "id": "DE-48989170",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-107706095",
+          "name": "Marken Drogerie"
+         },
+         {
+          "id": "DE-16150399",
+          "name": "syoss"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [
+         {
+          "other": "Je"
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 3.49,
+        "min": 3.49,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "(1 l = 8.73)",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:00:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  }
+ ]
+}

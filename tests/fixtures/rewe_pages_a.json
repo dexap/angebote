@@ -1,0 +1,557 @@
+{
+ "contents": [
+  {
+   "number": 0,
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "7e765268-d127-432a-9617-22e25eb61811",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1062",
+       "name": "REWE",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/7e765268-d127-432a-9617-22e25eb61811/main.jpg",
+      "parentContent": {
+       "id": "8671d3e2-879b-4911-a62a-6964f2910f8d",
+       "legacyId": 2501274474,
+       "type": "static_brochure",
+       "page": {
+        "number": 0,
+        "area": {
+         "bottomRight": {
+          "x": 0.33555928,
+          "y": 0.7573182
+         },
+         "topLeft": {
+          "x": 0.02003339,
+          "y": 0.52691215
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Chips",
+        "brandName": "Pringles",
+        "description": [
+         {
+          "paragraph": "je 165-g-Dose"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/7e765268-d127-432a-9617-22e25eb61811/bfdc3109-c6bf-42a9-9b46-a5c0387d399f.jpg",
+          "dimensions": {
+           "width": 130,
+           "height": 381
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/7e765268-d127-432a-9617-22e25eb61811/0996e498-b0c6-4835-ad09-d75163860ee4.jpg",
+          "dimensions": {
+           "width": 117,
+           "height": 381
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-48989303",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-106949053",
+          "name": "Marken Lebensmittel"
+         },
+         {
+          "id": "DE-14370",
+          "name": "Pringles"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 1.49,
+        "min": 1.49,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "(1 kg = 9.03/8.05)",
+        "description": ""
+       },
+       {
+        "type": "OTHER",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 0,
+        "min": 0,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": "0,10 € Bonus"
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:00:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    },
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "0cda21b1-70b6-4381-a004-ab677bbf6209",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1062",
+       "name": "REWE",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/0cda21b1-70b6-4381-a004-ab677bbf6209/main.jpg",
+      "parentContent": {
+       "id": "8671d3e2-879b-4911-a62a-6964f2910f8d",
+       "legacyId": 2501274474,
+       "type": "static_brochure",
+       "page": {
+        "number": 0,
+        "area": {
+         "bottomRight": {
+          "x": 0.6627713,
+          "y": 0.9763928
+         },
+         "topLeft": {
+          "x": 0.33555928,
+          "y": 0.7573182
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Pepsi",
+        "description": [
+         {
+          "paragraph": "versch. Sorten, koffeinhaltig 1,25-l-Fl. zzgl. 0.25 Pfand"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/0cda21b1-70b6-4381-a004-ab677bbf6209/cfcac8d7-57a7-455f-80fb-9a29020a1e47.jpg",
+          "dimensions": {
+           "width": 123,
+           "height": 432
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/0cda21b1-70b6-4381-a004-ab677bbf6209/9343fe22-37d9-446d-b6a9-95adccd87874.jpg",
+          "dimensions": {
+           "width": 123,
+           "height": 432
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-105",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-48920851",
+          "name": "Getränke"
+         },
+         {
+          "id": "DE-50523564",
+          "name": "Softdrinks"
+         },
+         {
+          "id": "DE-254645365",
+          "name": "Softdrinkmarken"
+         },
+         {
+          "id": "DE-5934",
+          "name": "Pepsi"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [
+         {
+          "other": "je"
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 0.79,
+        "min": 0.79,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "(1 l = 0.63)",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:00:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  },
+  {
+   "number": 6,
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "8304ad51-cb9d-4c7f-bd03-7f7942553d97",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1062",
+       "name": "REWE",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/8304ad51-cb9d-4c7f-bd03-7f7942553d97/main.jpg",
+      "parentContent": {
+       "id": "8671d3e2-879b-4911-a62a-6964f2910f8d",
+       "legacyId": 2501274474,
+       "type": "static_brochure",
+       "page": {
+        "number": 6,
+        "area": {
+         "bottomRight": {
+          "x": 0.33722872,
+          "y": 0.53068936
+         },
+         "topLeft": {
+          "x": 0.026711185,
+          "y": 0.31728044
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Schlemmertöpfchen",
+        "brandName": "Kühne",
+        "description": [
+         {
+          "paragraph": "mit Kräutern verfeinert 530-g-Glas"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/8304ad51-cb9d-4c7f-bd03-7f7942553d97/75c2eabe-78bd-44f8-b5a7-fe6ad8bf10ba.jpg",
+          "dimensions": {
+           "width": 230,
+           "height": 277
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-48989303",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-106949053",
+          "name": "Marken Lebensmittel"
+         },
+         {
+          "id": "DE-170908",
+          "name": "Kühne"
+         },
+         {
+          "id": "DE-1196028920",
+          "name": "Schlemmertöpfchen"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [
+         {
+          "other": "je"
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 2.22,
+        "min": 2.22,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "(1 kg = 7.40)",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:00:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  },
+  {
+   "number": 9,
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "c6a44b94-4cc0-48b2-8b1f-b93749c25b95",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1062",
+       "name": "REWE",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/c6a44b94-4cc0-48b2-8b1f-b93749c25b95/main.jpg",
+      "parentContent": {
+       "id": "8671d3e2-879b-4911-a62a-6964f2910f8d",
+       "legacyId": 2501274474,
+       "type": "static_brochure",
+       "page": {
+        "number": 9,
+        "area": {
+         "bottomRight": {
+          "x": 0.33722872,
+          "y": 0.97544855
+         },
+         "topLeft": {
+          "x": 0.025041737,
+          "y": 0.7554296
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Haarspray",
+        "brandName": "Syoss",
+        "description": [
+         {
+          "paragraph": "versch. Sorten 400-ml-Dose"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/c6a44b94-4cc0-48b2-8b1f-b93749c25b95/584404e3-2c6d-4071-a1bb-9c2ae624d0ff.jpg",
+          "dimensions": {
+           "width": 106,
+           "height": 457
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/c6a44b94-4cc0-48b2-8b1f-b93749c25b95/b9a64eb4-1eed-4336-9524-93b971932f3f.jpg",
+          "dimensions": {
+           "width": 106,
+           "height": 457
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-447",
+          "name": "Drogerie und Haushalt"
+         },
+         {
+          "id": "DE-48989170",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-107706095",
+          "name": "Marken Drogerie"
+         },
+         {
+          "id": "DE-16150399",
+          "name": "syoss"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [
+         {
+          "other": "Je"
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 3.49,
+        "min": 3.49,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "(1 l = 8.73)",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:00:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  },
+  {
+   "number": 20,
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "c708702e-ed5c-4683-98b2-40da6ef28c45",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1062",
+       "name": "REWE",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/c708702e-ed5c-4683-98b2-40da6ef28c45/main.jpg",
+      "parentContent": {
+       "id": "8671d3e2-879b-4911-a62a-6964f2910f8d",
+       "legacyId": 2501274474,
+       "type": "static_brochure",
+       "page": {
+        "number": 20,
+        "area": {
+         "bottomRight": {
+          "x": 0.33722872,
+          "y": 0.97544855
+         },
+         "topLeft": {
+          "x": 0.030050084,
+          "y": 0.7582625
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Proschmelz",
+        "brandName": "Sensodyne",
+        "description": [
+         {
+          "paragraph": "Fortschrittlicher Zahnschmelzschutz Stärkt, Schützt, Schmeckt 75-ml-Tube-Pckg."
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/c708702e-ed5c-4683-98b2-40da6ef28c45/6a651d68-a893-4cac-b5cd-67e51084bf1f.jpg",
+          "dimensions": {
+           "width": 369,
+           "height": 120
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-447",
+          "name": "Drogerie und Haushalt"
+         },
+         {
+          "id": "DE-48989170",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-107706095",
+          "name": "Marken Drogerie"
+         },
+         {
+          "id": "DE-170775",
+          "name": "Sensodyne"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [
+         {
+          "other": "Je"
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 4.79,
+        "min": 4.79,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "(1 l = 63.87)",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-09-27T22:00:00.000+0000",
+         "endDate": "2026-10-02T21:00:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  }
+ ]
+}

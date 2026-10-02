@@ -16,4 +16,13 @@ def test_live_scrape_returns_food_offers():
     assert result["count"] > 20
     for offer in result["offers"]:
         assert offer["price"] > 0
-        assert offer["category_path"][0] == "Lebensmittel und Getränke"
+        assert offer["category_group"] == "Lebensmittel und Getränke"
+
+
+def test_live_rewe_national_offers_satisfy_schema():
+    from lidl_angebote import check, retailers
+
+    for key in ("lidl", "rewe"):
+        result = scraper.scrape(date.today(), config=retailers.get(key))
+        assert result["count"] > 20
+        assert check.check_offers(result["offers"]) == []

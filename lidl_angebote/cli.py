@@ -4,21 +4,22 @@ import sys
 from datetime import date, timedelta
 from pathlib import Path
 
-from . import kaufda, scraper
+from . import kaufda, retailers, scraper
 
 
-def default_output_path(ref_date):
+def default_output_path(ref_date, retailer="lidl"):
     year, week, _ = ref_date.isocalendar()
-    return f"data/lidl_{year}-KW{week:02d}.json"
+    return f"data/{retailer}_{year}-KW{week:02d}.json"
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
         prog="lidl-angebote",
-        description="Lidl-Lebensmittelangebote der aktuellen Woche von kaufda.de als JSON speichern.",
+        description="Wochenangebote (Lidl, REWE) von kaufda.de als JSON speichern.",
     )
+    parser.add_argument("--retailer", choices=sorted(retailers.RETAILERS), default="lidl", help="Händler (Standard: lidl)")
     parser.add_argument("--date", type=date.fromisoformat, default=kaufda.today(), help="Stichtag (YYYY-MM-DD), Standard: heute")
-    parser.add_argument("--output", "-o", help="Ziel-Datei (Standard: data/lidl_<Jahr>-KW<Woche>.json), '-' für stdout")
+    parser.add_argument("--output", "-o", help="Ziel-Datei (Standard: data/<händler>_<Jahr>-KW<Woche>.json), '-' für stdout")
     parser.add_argument("--next", action="store_true", help="Woche nach dem Stichtag (nächster Prospekt)")
     parser.add_argument("--no-drinks", action="store_true", help="Getränke ausschließen")
     parser.add_argument("--include-long-running", action="store_true", help="auch Langläufer-Prospekte (> 14 Tage)")
@@ -29,6 +30,7 @@ def main(argv=None):
     try:
         result = scraper.scrape(
             args.date,
+            config=retailers.get(args.retailer),
             include_drinks=not args.no_drinks,
             include_long_running=args.include_long_running,
         )
@@ -40,7 +42,7 @@ def main(argv=None):
     if args.output == "-":
         print(text)
         return 0
-    out = Path(args.output or default_output_path(args.date))
+    out = Path(args.output or default_output_path(args.date, args.retailer))
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(text + "\n", encoding="utf-8")
     titles = ", ".join(f"{b['title']} ({b['valid_from']} – {b['valid_until']})" for b in result["brochures"])

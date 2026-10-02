@@ -1,10 +1,12 @@
-"""Baut die statische JSON-API für GitHub Pages.
+"""Baut die statische JSON-API (GitHub Pages / lokaler Server).
 
-    lidl.json, lidl/index.html            -> Angebote der aktuellen Woche
-    lidl/next.json, lidl/next/index.html  -> Angebote der nächsten Woche
+    <händler>.json, <händler>/index.html            -> Angebote der aktuellen Woche
+    <händler>/next.json, <händler>/next/index.html  -> Angebote der nächsten Woche
+    all.json, all/...                               -> alle Händler zusammen
 
-Inhalt ist jeweils nur die Liste der Angebote; ohne Prospekt ``[]``.
-Netzwerk- oder Parserfehler brechen ab, damit nichts Leeres veröffentlicht wird.
+Händler siehe ``retailers.RETAILERS``. Inhalt ist jeweils nur die Liste der Angebote;
+ohne Prospekt ``[]``. Netzwerk-, Parser- oder Schemafehler brechen ab, damit nichts
+Leeres oder Kaputtes veröffentlicht wird.
 """
 
 import argparse
@@ -12,33 +14,38 @@ import json
 from datetime import date, timedelta
 from pathlib import Path
 
-from . import kaufda, scraper
+from . import check, kaufda, retailers, scraper
 
-ENDPOINTS = {"lidl": 0, "lidl/next": 7}  # Pfad -> Tage ab heute
-
-INDEX_HTML = """<!doctype html>
-<html lang="de"><head><meta charset="utf-8"><title>Angebote-API</title></head>
-<body>
-<h1>Angebote-API</h1>
-<ul>
-<li><a href="lidl.json">lidl.json</a> (auch <a href="lidl/">lidl/</a>) – Lidl, aktuelle Woche</li>
-<li><a href="lidl/next.json">lidl/next.json</a> (auch <a href="lidl/next/">lidl/next/</a>) – Lidl, nächste Woche</li>
-</ul>
-</body></html>
-"""
+WEEKS = {"": 0, "/next": 7}  # Pfad-Suffix -> Tage ab heute
+ALL = "all"
 
 
-def _offers(ref_date, fetch, retailer):
+def _offers(ref_date, fetch, loaded, config):
     try:
-        return scraper.scrape(ref_date, fetch=fetch, retailer=retailer)["offers"]
+        return scraper.scrape(ref_date, fetch=fetch, retailer=loaded, config=config)["offers"]
     except scraper.NoBrochureError:
         return []
 
 
+def _index_html(paths):
+    items = "\n".join(f'<li><a href="{path}.json">{path}.json</a> (auch <a href="{path}/">{path}/</a>)</li>' for path in paths)
+    return (
+        '<!doctype html>\n<html lang="de"><head><meta charset="utf-8"><title>Angebote-API</title></head>\n'
+        f"<body>\n<h1>Angebote-API</h1>\n<ul>\n{items}\n</ul>\n</body></html>\n"
+    )
+
+
 def build_site(out_dir, today, fetch=None):
     out = Path(out_dir)
-    retailer = scraper.load_retailer(fetch)
-    results = {path: _offers(today + timedelta(days=days), fetch, retailer) for path, days in ENDPOINTS.items()}
+    results = {}
+    for key, config in retailers.RETAILERS.items():
+        loaded = scraper.load_retailer(fetch, config)
+        for suffix, days in WEEKS.items():
+            offers = _offers(today + timedelta(days=days), fetch, loaded, config)
+            check.ensure_valid(offers, label=f"{key}{suffix}")
+            results[key + suffix] = offers
+    for suffix in WEEKS:
+        results[ALL + suffix] = [o for key in retailers.RETAILERS for o in results[key + suffix]]
 
     for path, offers in results.items():
         text = json.dumps(offers, ensure_ascii=False, indent=1) + "\n"
@@ -46,7 +53,7 @@ def build_site(out_dir, today, fetch=None):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(text, encoding="utf-8")
     (out / ".nojekyll").write_text("")
-    (out / "index.html").write_text(INDEX_HTML, encoding="utf-8")
+    (out / "index.html").write_text(_index_html(list(results)), encoding="utf-8")
     return {path: len(offers) for path, offers in results.items()}
 
 

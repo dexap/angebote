@@ -33,15 +33,11 @@ def test_next_week_offers(built):
     assert names == ["Almighurt", "Antipasti", "PRINGLES"]
 
 
-def test_retailer_page_fetched_once(built, fake_fetch):
-    assert len([u for u in fake_fetch.calls if "Geschaefte" in u]) == 1
-
-
 def test_missing_brochure_gives_empty_list(tmp_path, fake_fetch):
     # KW49: kein Wochenprospekt im Fixture
     site.build_site(tmp_path, today=date(2026, 12, 1), fetch=fake_fetch)
-    assert _read(tmp_path / "lidl.json") == []
-    assert _read(tmp_path / "lidl" / "next.json") == []
+    for path in ("lidl.json", "lidl/next.json", "rewe.json", "all.json"):
+        assert _read(tmp_path / path) == []
 
 
 def test_network_error_is_not_published_as_empty(tmp_path):
@@ -56,7 +52,40 @@ def test_network_error_is_not_published_as_empty(tmp_path):
 def test_static_files(built):
     assert (built / ".nojekyll").exists()
     index = (built / "index.html").read_text(encoding="utf-8")
-    assert "lidl.json" in index and "lidl/next.json" in index
+    for path in ("lidl.json", "lidl/next.json", "rewe.json", "rewe/next.json", "all.json", "all/next.json"):
+        assert path in index
+
+
+def test_rewe_endpoints(built):
+    offers = _read(built / "rewe.json")
+    assert sorted(o["name"] for o in offers) == ["Chips", "Haarspray", "Pepsi"]
+    assert {o["retailer"] for o in offers} == {"rewe"}
+    assert _read(built / "rewe" / "index.html") == offers
+    assert _read(built / "rewe" / "next.json") == []
+
+
+def test_all_endpoint_merges_retailers(built):
+    merged = _read(built / "all.json")
+    assert len(merged) == len(_read(built / "lidl.json")) + len(_read(built / "rewe.json"))
+    assert {o["retailer"] for o in merged} == {"lidl", "rewe"}
+    ids = [o["id"] for o in merged]
+    assert len(ids) == len(set(ids))
+    assert _read(built / "all" / "index.html") == merged
+    assert len(_read(built / "all" / "next.json")) == len(_read(built / "lidl" / "next.json"))
+
+
+def test_each_retailer_page_fetched_once(built, fake_fetch):
+    urls = [u for u in fake_fetch.calls if "Geschaefte" in u]
+    assert sorted(urls) == ["https://www.kaufda.de/Geschaefte/Lidl", "https://www.kaufda.de/Geschaefte/REWE"]
+
+
+def test_invalid_data_is_not_published(tmp_path, fake_fetch, monkeypatch):
+    from lidl_angebote import check
+
+    monkeypatch.setattr(check, "check_offers", lambda offers: ["x: kaputt"])
+    with pytest.raises(check.SchemaError):
+        site.build_site(tmp_path, today=date(2026, 10, 2), fetch=fake_fetch)
+    assert not (tmp_path / "lidl.json").exists()
 
 
 def test_main_writes_site(tmp_path, monkeypatch, fake_fetch):

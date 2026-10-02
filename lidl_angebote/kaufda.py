@@ -12,6 +12,10 @@ import re
 from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
+from . import retailers
+from .retailers.base import conditions as _conditions
+from .retailers.base import first_deal as _first
+
 TZ = ZoneInfo("Europe/Berlin")
 
 FOOD_CATEGORY_ID = "DE-104"  # "Lebensmittel und Getränke"
@@ -93,6 +97,39 @@ def select_brochures(brochures, week, include_long_running=False):
     return selected
 
 
+_UNIT_PRICE = re.compile(r"^\(?\s*(\d+(?:[.,]\d+)?)\s*([^\W\d_]+)\s*=\s*(\d[\d.,]*)\s*\)?$")
+
+
+_PER_UNIT = re.compile(r"^(-?\.\d+|\d[\d.,]*)\s*/\s*([^\W\d_]+)\.?$")
+
+
+def _number(text):
+    """'3.90', '12,50', '1.299,00' und '-.57' -> float."""
+    if text.startswith("-."):
+        text = text[1:]
+    if "," in text:
+        text = text.replace(".", "").replace(",", ".")
+    return float(text)
+
+
+def parse_unit_price(text):
+    """'1 kg = 3.90' / '(1 l = 0.63)' -> {"amount", "unit", "quantity"}; sonst None."""
+    text = (text or "").strip()
+    per_unit = _PER_UNIT.match(text)  # "36.99/kg", "-.57/Stk."
+    if per_unit:
+        return {"amount": _number(per_unit.group(1)), "unit": per_unit.group(2), "quantity": 1}
+    match = _UNIT_PRICE.match(text)
+    if not match:
+        return None
+    quantity, unit, amount = match.groups()
+    quantity = _number(quantity)
+    return {
+        "amount": _number(amount),
+        "unit": unit,
+        "quantity": int(quantity) if quantity == int(quantity) else quantity,
+    }
+
+
 def _flat_path(category_paths):
     """Viewer-API liefert einen flachen Pfad, die SEO-Seite eine Liste von Pfaden."""
     if category_paths and isinstance(category_paths[0], list):
@@ -123,16 +160,6 @@ def _deals_for(product, deals, multi):
     return own + shared
 
 
-def _first(deals, deal_type):
-    return next((d for d in deals if d.get("type") == deal_type and (d.get("min") or 0) > 0), None)
-
-
-def _conditions(deal):
-    if not deal:
-        return []
-    return [c["other"].strip() for c in deal.get("conditions", []) if c.get("other", "").strip()]
-
-
 def _price(deal):
     return deal["min"] if deal else None
 
@@ -147,56 +174,46 @@ def _offer_validity(content, brochure):
     return date.fromisoformat(brochure["valid_from"]), date.fromisoformat(brochure["valid_until"])
 
 
-def _record(content, product, deals, index, multi, page_number, validity, brochure):
+def _record(content, product, deals, index, multi, validity, retailer):
     sales = _first(deals, "SALES_PRICE")
-    special = _first(deals, "SPECIAL_PRICE")
-    main = sales or special
+    main = sales or _first(deals, "SPECIAL_PRICE")
     if not main:
         return None
-    extra_special = special if sales else None  # z. B. "Mit Lidl Plus"
 
     price = _price(main)
+    special_price, special_condition, extras = retailers.get(retailer).special_price(price, deals)
     regular = _price(_first(deals, "REGULAR_PRICE"))
-    uvp = _price(_first(deals, "RECOMMENDED_RETAIL_PRICE"))
-    reference = regular or uvp
+    reference = regular or _price(_first(deals, "RECOMMENDED_RETAIL_PRICE"))  # Normalpreis, sonst UVP
     discount = round((reference - price) / reference * 100) if reference and reference > price else None
     path = _flat_path(product.get("categoryPaths"))
     names = [p["name"] for p in path]
-    extras = [
-        d["description"].strip()
-        for d in deals
-        if d.get("type") == "OTHER" and (d.get("description") or "").strip()
-    ]
+    unit_price = parse_unit_price(main.get("priceByBaseUnit"))
+    notes = list(dict.fromkeys(_conditions(main) + extras))  # Preisbedingungen + Zusatzaktionen
 
-    return {
+    record = {
+        "retailer": retailer,
         "id": f"{content['id']}#{index}" if multi else content["id"],
-        "offer_id": content["id"],
         "name": product["name"].replace("\xad", ""),
         "brand": product.get("brandName"),
         "description": " ".join(p["paragraph"].strip() for p in product.get("description", []) if p.get("paragraph")),
         "price": price,
-        "regular_price": regular,
-        "uvp": uvp,
-        "special_price": _price(extra_special),
-        "special_price_condition": ", ".join(_conditions(extra_special)) or None,
+        "regular_price": reference,
+        "special_price": special_price,
+        "special_price_condition": special_condition if special_price else None,
         "discount_percent": discount,
-        "base_price": main.get("priceByBaseUnit") or None,
-        "conditions": _conditions(main),
-        "extras": extras,
-        "category": names[-1] if names else None,
-        "category_path": names,
+        "unit_price": unit_price,
+        "notes": notes,
+        "category_group": names[0] if names else None,
         "is_drink": any(n in DRINK_CATEGORIES for n in names),
         "valid_from": validity[0].isoformat(),
         "valid_until": validity[1].isoformat(),
-        "brochure_id": brochure["id"],
-        "brochure_title": brochure["title"],
-        "page": page_number + 1,
-        "image": content.get("image"),
     }
+    # Leere Werte weglassen (fehlend = nicht vorhanden); ``is_drink`` bleibt immer.
+    return {k: v for k, v in record.items() if k == "is_drink" or v not in (None, "", [], {})}
 
 
-def parse_offers(pages, brochure, week, include_drinks=True):
-    """Lebensmittel-Angebote eines Prospekts (Antwort der Viewer-API)."""
+def parse_offers(pages, brochure, week, include_drinks=True, food_only=True, retailer="lidl"):
+    """Angebote eines Prospekts (Antwort der Viewer-API); ``food_only`` = nur Lebensmittel und Getränke."""
     offers = []
     for page in pages.get("contents", []):
         for item in page.get("offers", []):
@@ -208,10 +225,10 @@ def parse_offers(pages, brochure, week, include_drinks=True):
                 continue
             multi = len(products) > 1
             for index, product in enumerate(products):
-                if not _is_food(_flat_path(product.get("categoryPaths"))):
+                if food_only and not _is_food(_flat_path(product.get("categoryPaths"))):
                     continue
                 own = _deals_for(product, deals, multi)
-                record = _record(content, product, own, index, multi, page["number"], validity, brochure)
+                record = _record(content, product, own, index, multi, validity, retailer)
                 if record is None or (not include_drinks and record["is_drink"]):
                     continue
                 offers.append(record)
