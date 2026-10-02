@@ -29,15 +29,20 @@ class NoBrochureError(RuntimeError):
     pass
 
 
-def scrape(ref_date, fetch=None, include_drinks=True, include_long_running=False):
+def load_retailer(fetch=None):
+    """Händlerseite einmal laden: alle Lidl-Prospekte und Standort."""
+    next_data = kaufda.extract_next_data((fetch or http_get)(RETAILER_URL))
+    lat, lng = kaufda.location(next_data)
+    return {"brochures": kaufda.find_brochures(next_data, publisher=RETAILER), "lat": lat, "lng": lng}
+
+
+def scrape(ref_date, fetch=None, include_drinks=True, include_long_running=False, retailer=None):
     fetch = fetch or http_get
     week = kaufda.week_range(ref_date)
 
-    next_data = kaufda.extract_next_data(fetch(RETAILER_URL))
-    lat, lng = kaufda.location(next_data)
-    brochures = kaufda.select_brochures(
-        kaufda.find_brochures(next_data, publisher=RETAILER), week, include_long_running
-    )
+    retailer = retailer or load_retailer(fetch)
+    lat, lng = retailer["lat"], retailer["lng"]
+    brochures = kaufda.select_brochures(retailer["brochures"], week, include_long_running)
     if not brochures:
         raise NoBrochureError(f"Kein {RETAILER}-Prospekt für {week[0]} – {week[1]} gefunden.")
 

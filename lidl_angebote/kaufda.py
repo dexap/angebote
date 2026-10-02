@@ -45,6 +45,10 @@ def _local_date(timestamp):
     return dt.astimezone(TZ).date()
 
 
+def today():
+    return datetime.now(TZ).date()
+
+
 def week_range(ref):
     start = ref - timedelta(days=ref.weekday())
     return start, start + timedelta(days=6)

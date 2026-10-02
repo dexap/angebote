@@ -13,11 +13,14 @@ Im Repository-Root:
 
 ```bash
 python3 -m lidl_angebote                      # aktuelle Woche -> data/lidl_<Jahr>-KW<Woche>.json
-python3 -m lidl_angebote --date 2026-10-05    # Woche zu einem Stichtag (z. B. nächste Woche)
+python3 -m lidl_angebote --next               # nächste Woche (nächster Prospekt)
+python3 -m lidl_angebote --date 2026-10-05    # Woche zu einem Stichtag
 python3 -m lidl_angebote --no-drinks          # ohne Getränke
 python3 -m lidl_angebote --include-long-running  # auch Langläufer-Prospekte (> 14 Tage, z. B. "Preisführer")
 python3 -m lidl_angebote -o -                 # JSON auf stdout
 ```
+
+Ohne Netzzugang zu kaufda: die veröffentlichte API lesen – `https://dexap.github.io/angebote/lidl.json` (aktuelle Woche) bzw. `…/lidl/next.json` (nächste Woche); Inhalt ist nur die Angebotsliste.
 
 Exit-Code 1 = kein passender Wochenprospekt gefunden (Meldung auf stderr).
 
