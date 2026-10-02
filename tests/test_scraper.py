@@ -46,8 +46,37 @@ def test_scrape_without_drinks(fake_fetch):
     assert result["filters"] == {"include_drinks": False, "include_long_running": False}
 
 
+def test_scrape_reuses_loaded_retailer_page(fake_fetch):
+    retailer = scraper.load_retailer(fetch=fake_fetch)
+    assert retailer["lat"] == 52.522 and retailer["lng"] == 13.4161
+    assert len(retailer["brochures"]) == 3
+
+    scraper.scrape(date(2026, 10, 2), fetch=fake_fetch, retailer=retailer)
+    scraper.scrape(date(2026, 10, 9), fetch=fake_fetch, retailer=retailer)
+
+    retailer_calls = [u for u in fake_fetch.calls if "Geschaefte" in u]
+    assert len(retailer_calls) == 1
+
+
+def test_scrape_next_week(fake_fetch):
+    result = scraper.scrape(date(2026, 10, 9), fetch=fake_fetch)
+    assert result["week"]["number"] == 41
+    assert [b["title"] for b in result["brochures"]] == ["LIDL LOHNT SICH"]
+    assert sorted(o["name"] for o in result["offers"]) == ["Almighurt", "Antipasti", "PRINGLES"]
+
+
 def test_default_output_path():
     assert cli.default_output_path(date(2026, 10, 2)) == "data/lidl_2026-KW40.json"
+
+
+def test_cli_next_week(tmp_path, monkeypatch, fake_fetch):
+    monkeypatch.setattr(scraper, "http_get", fake_fetch)
+    monkeypatch.chdir(tmp_path)
+
+    assert cli.main(["--date", "2026-10-02", "--next"]) == 0
+
+    data = json.loads((tmp_path / "data/lidl_2026-KW41.json").read_text(encoding="utf-8"))
+    assert data["week"]["number"] == 41
 
 
 def test_cli_writes_json(tmp_path, monkeypatch, fake_fetch):

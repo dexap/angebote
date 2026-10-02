@@ -1,0 +1,526 @@
+{
+ "contents": [
+  {
+   "number": 0,
+   "images": [],
+   "linkOuts": [],
+   "offers": [
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "82708d6b-51f5-4107-a30f-2901c01522e1",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/82708d6b-51f5-4107-a30f-2901c01522e1/main.jpg",
+      "parentContent": {
+       "id": "2a8a792c-d99b-4497-90f7-d5a875f9b7e3",
+       "legacyId": 2501279091,
+       "type": "static_brochure",
+       "page": {
+        "number": 0,
+        "area": {
+         "bottomRight": {
+          "x": 0.33222038,
+          "y": 0.93608654
+         },
+         "topLeft": {
+          "x": 0.013355592,
+          "y": 0.7246804
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Almighurt",
+        "brandName": "Ehrmann",
+        "description": [
+         {
+          "paragraph": "Versch. Sorten. Gekühlt. 150 g"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/82708d6b-51f5-4107-a30f-2901c01522e1/0971d5cb-8758-4fd7-96d5-b8fd002314f8.jpg",
+          "dimensions": {
+           "width": 89,
+           "height": 112
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/82708d6b-51f5-4107-a30f-2901c01522e1/5ca91b94-67f5-4585-ab08-93b1f0f2dfcb.jpg",
+          "dimensions": {
+           "width": 87,
+           "height": 110
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-48989303",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-106949053",
+          "name": "Marken Lebensmittel"
+         },
+         {
+          "id": "DE-488728",
+          "name": "Ehrmann"
+         },
+         {
+          "id": "DE-112829019",
+          "name": "Almighurt"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SPECIAL_PRICE",
+        "conditions": [
+         {
+          "other": "Mit Lidl Plus"
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 0.29,
+        "min": 0.29,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "1 kg = 1.93",
+        "description": ""
+       },
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 0.33,
+        "min": 0.33,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "1 kg = 2.20",
+        "description": ""
+       },
+       {
+        "type": "RECOMMENDED_RETAIL_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 0.89,
+        "min": 0.89,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-10-04T22:00:00.000+0000",
+         "endDate": "2026-10-10T21:00:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    },
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "f0e41067-ff55-4c29-871a-6488afb9a5a8",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/f0e41067-ff55-4c29-871a-6488afb9a5a8/main.jpg",
+      "parentContent": {
+       "id": "2a8a792c-d99b-4497-90f7-d5a875f9b7e3",
+       "legacyId": 2501279091,
+       "type": "static_brochure",
+       "page": {
+        "number": 0,
+        "area": {
+         "bottomRight": {
+          "x": 0.66611016,
+          "y": 0.93608654
+         },
+         "topLeft": {
+          "x": 0.33222038,
+          "y": 0.7246804
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "PRINGLES",
+        "description": [
+         {
+          "paragraph": "185 g"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/f0e41067-ff55-4c29-871a-6488afb9a5a8/523b09c2-bf25-4cde-b4da-4c6cbf98748b.jpg",
+          "dimensions": {
+           "width": 289,
+           "height": 289
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-105",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-48921103",
+          "name": "Lebensmittel"
+         },
+         {
+          "id": "DE-142",
+          "name": "Knabberzeug"
+         },
+         {
+          "id": "DE-144",
+          "name": "Chips"
+         },
+         {
+          "id": "DE-106938527",
+          "name": "Kartoffelchips"
+         },
+         {
+          "id": "DE-405226895",
+          "name": "Cheese & Onion-Chips"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SPECIAL_PRICE",
+        "conditions": [
+         {
+          "other": "Mit Lidl Plus"
+         }
+        ],
+        "currencyCode": "EUR",
+        "max": 1.49,
+        "min": 1.49,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "1 kg = 8.05",
+        "description": ""
+       },
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 2.79,
+        "min": 2.79,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "1kg=15.08",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-10-04T22:00:00.000+0000",
+         "endDate": "2026-10-05T21:59:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    },
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "8fa6108d-f81d-4b0a-8739-7915b990d167",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/8fa6108d-f81d-4b0a-8739-7915b990d167/main.jpg",
+      "parentContent": {
+       "id": "2a8a792c-d99b-4497-90f7-d5a875f9b7e3",
+       "legacyId": 2501279091,
+       "type": "static_brochure",
+       "page": {
+        "number": 0,
+        "area": {
+         "bottomRight": {
+          "x": 0.97996664,
+          "y": 0.93608654
+         },
+         "topLeft": {
+          "x": 0.66611016,
+          "y": 0.7246804
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Antipasti",
+        "description": [
+         {
+          "paragraph": "ab"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/8fa6108d-f81d-4b0a-8739-7915b990d167/de6f312e-364b-4134-bad8-b7179360295b.jpg",
+          "dimensions": {
+           "width": 135,
+           "height": 223
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/8fa6108d-f81d-4b0a-8739-7915b990d167/63853180-ea5e-4043-8d03-ec81ad5f18d1.jpg",
+          "dimensions": {
+           "width": 222,
+           "height": 103
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/8fa6108d-f81d-4b0a-8739-7915b990d167/b7c207b3-544e-4f5b-a93a-095917250aae.jpg",
+          "dimensions": {
+           "width": 290,
+           "height": 359
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-104",
+          "name": "Lebensmittel und Getränke"
+         },
+         {
+          "id": "DE-105",
+          "name": "Produkte"
+         },
+         {
+          "id": "DE-48921103",
+          "name": "Lebensmittel"
+         },
+         {
+          "id": "DE-143148665",
+          "name": "Feinkostlebensmittel"
+         },
+         {
+          "id": "DE-6750",
+          "name": "Antipasti"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 2.99,
+        "min": 2.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": ""
+       }
+      ],
+      "linkOuts": [],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-10-04T22:00:00.000+0000",
+         "endDate": "2026-10-10T21:00:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    },
+    {
+     "placement": "",
+     "adFormat": null,
+     "content": {
+      "id": "3ebdcc55-c0e4-4aba-a2a1-1c62e99c9cf2",
+      "type": "offer",
+      "publisher": {
+       "id": "DE-1013",
+       "name": "Lidl",
+       "images": []
+      },
+      "image": "https://content-media.bonial.biz/3ebdcc55-c0e4-4aba-a2a1-1c62e99c9cf2/main.jpg",
+      "parentContent": {
+       "id": "2a8a792c-d99b-4497-90f7-d5a875f9b7e3",
+       "legacyId": 2501279091,
+       "type": "static_brochure",
+       "page": {
+        "number": 0,
+        "area": {
+         "bottomRight": {
+          "x": 0.97996664,
+          "y": 0.7246804
+         },
+         "topLeft": {
+          "x": 0.33222038,
+          "y": 0.553589
+         }
+        }
+       }
+      },
+      "products": [
+       {
+        "name": "Premium-Pfanne",
+        "brandName": "SILVERCREST",
+        "description": [
+         {
+          "paragraph": "mit Kupferschicht"
+         }
+        ],
+        "images": [
+         {
+          "url": "https://content-media.bonial.biz/3ebdcc55-c0e4-4aba-a2a1-1c62e99c9cf2/22a9ba24-3d40-4225-a49b-25be73a9803f.jpg",
+          "dimensions": {
+           "width": 837,
+           "height": 559
+          }
+         },
+         {
+          "url": "https://content-media.bonial.biz/3ebdcc55-c0e4-4aba-a2a1-1c62e99c9cf2/72abce32-7cc3-43f8-9f1a-e8e1b90cc148.jpg",
+          "dimensions": {
+           "width": 1125,
+           "height": 751
+          }
+         }
+        ],
+        "categoryPaths": [
+         {
+          "id": "DE-447",
+          "name": "Drogerie und Haushalt"
+         },
+         {
+          "id": "DE-48989170",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-106949113",
+          "name": "Marken Haushalt"
+         },
+         {
+          "id": "DE-109916351",
+          "name": "SilverCrest"
+         }
+        ]
+       },
+       {
+        "name": "Premium-Topf",
+        "brandName": "SILVERCREST",
+        "description": [
+         {
+          "paragraph": "mit Kupferschicht"
+         }
+        ],
+        "images": [],
+        "categoryPaths": [
+         {
+          "id": "DE-447",
+          "name": "Drogerie und Haushalt"
+         },
+         {
+          "id": "DE-48989170",
+          "name": "Marken"
+         },
+         {
+          "id": "DE-106949113",
+          "name": "Marken Haushalt"
+         },
+         {
+          "id": "DE-109916351",
+          "name": "SilverCrest"
+         }
+        ]
+       }
+      ],
+      "deals": [
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 39.99,
+        "min": 39.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": "Premium-Pfanne"
+       },
+       {
+        "type": "SALES_PRICE",
+        "conditions": [],
+        "currencyCode": "EUR",
+        "max": 49.99,
+        "min": 49.99,
+        "frequency": "ONCE",
+        "priceByBaseUnit": "",
+        "description": "Premium-Topf"
+       }
+      ],
+      "linkOuts": [
+       {
+        "label": "Premium-Topf mit Kupferschicht, Andre Agassi, Ø 24 cm im Online-Shop!",
+        "intent": "OTHER",
+        "webUrl": "https://www.lidl.de/p/silvercrest-premium-topf-mit-kupferschicht-o-24-cm/p100410682?utm_source=vermarkter&utm_medium=leaflet&utm_campaign=lf_d-lf-dhz_others_notset_wt_omc_d-lf-dhz_sl_051026-101026&utm_content=de=p100410682",
+        "mobileUrl": "https://www.lidl.de/p/silvercrest-premium-topf-mit-kupferschicht-o-24-cm/p100410682?utm_source=vermarkter&utm_medium=leaflet&utm_campaign=lf_d-lf-dhz_others_notset_wt_omc_d-lf-dhz_sl_051026-101026&utm_content=de=p100410682"
+       },
+       {
+        "label": "Premium-Pfanne mit Kupferschicht, Andre Agassi, Ø 28 cm im Online-Shop!",
+        "intent": "OTHER",
+        "webUrl": "https://www.lidl.de/p/silvercrest-premium-pfanne-mit-kupferschicht-o-28-cm/p100410931?utm_source=vermarkter&utm_medium=leaflet&utm_campaign=lf_d-lf-dhz_others_notset_wt_omc_d-lf-dhz_sl_051026-101026&utm_content=de=p100410931",
+        "mobileUrl": "https://www.lidl.de/p/silvercrest-premium-pfanne-mit-kupferschicht-o-28-cm/p100410931?utm_source=vermarkter&utm_medium=leaflet&utm_campaign=lf_d-lf-dhz_others_notset_wt_omc_d-lf-dhz_sl_051026-101026&utm_content=de=p100410931"
+       }
+      ],
+      "publicationProfiles": [
+       {
+        "validity": {
+         "startDate": "2026-10-04T22:00:00.000+0000",
+         "endDate": "2026-10-10T21:00:00.000+0000"
+        }
+       }
+      ]
+     },
+     "externalTracking": {
+      "impression": [],
+      "click": []
+     }
+    }
+   ]
+  }
+ ]
+}
