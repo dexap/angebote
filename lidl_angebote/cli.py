@@ -1,10 +1,10 @@
 import argparse
 import json
 import sys
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
-from . import scraper
+from . import kaufda, scraper
 
 
 def default_output_path(ref_date):
@@ -17,11 +17,14 @@ def main(argv=None):
         prog="lidl-angebote",
         description="Lidl-Lebensmittelangebote der aktuellen Woche von kaufda.de als JSON speichern.",
     )
-    parser.add_argument("--date", type=date.fromisoformat, default=date.today(), help="Stichtag (YYYY-MM-DD), Standard: heute")
+    parser.add_argument("--date", type=date.fromisoformat, default=kaufda.today(), help="Stichtag (YYYY-MM-DD), Standard: heute")
     parser.add_argument("--output", "-o", help="Ziel-Datei (Standard: data/lidl_<Jahr>-KW<Woche>.json), '-' für stdout")
+    parser.add_argument("--next", action="store_true", help="Woche nach dem Stichtag (nächster Prospekt)")
     parser.add_argument("--no-drinks", action="store_true", help="Getränke ausschließen")
     parser.add_argument("--include-long-running", action="store_true", help="auch Langläufer-Prospekte (> 14 Tage)")
     args = parser.parse_args(argv)
+    if args.next:
+        args.date += timedelta(days=7)
 
     try:
         result = scraper.scrape(
