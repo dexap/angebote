@@ -147,6 +147,7 @@ OFFERS = [
     {"id": "1", "name": "Gekochte Kartofeln", "description": "Je 1 kg", "notes": ["Je Stück."], "brand": "Weihenstephan"},
     {"id": "2", "name": "Gekochte Bohnen", "price": 1.0},
     {"id": "3", "name": "Tee", "price": 2.0},
+    {"id": "4", "name": "Frische Kartoffeln", "price": 1.0},  # Beleg: das richtige Wort kommt anderswo vor
 ]
 FIX = {"Kartofeln": "Kartoffeln"}
 
@@ -190,16 +191,47 @@ def test_batches_of_at_most_batch_size():
 
 
 def test_words_joined_by_slash_or_hyphen_are_checked_and_fixed():
-    offers = [{"id": "1", "name": "Deutshcland/Italien, Klasse I", "price": 1.0}, {"id": "2", "name": "Back-Kartofeln", "price": 1.0}]
+    offers = [
+        {"id": "1", "name": "Deutshcland/Italien, Klasse I", "price": 1.0},
+        {"id": "2", "name": "Back-Kartofeln", "price": 1.0},
+        {"id": "3", "name": "Aus Deutschland, Kartoffeln", "price": 1.0},  # Belege
+    ]
     llm = FakeLLM({"Deutshcland": "Deutschland", "Kartofeln": "Kartoffeln"})
     out = Normalizer(llm=llm).offers(offers)
-    assert [o["name"] for o in out] == ["Deutschland/Italien, Klasse I", "Back-Kartoffeln"]
+    assert [o["name"] for o in out][:2] == ["Deutschland/Italien, Klasse I", "Back-Kartoffeln"]
 
 
 def test_fix_only_replaces_whole_words():
-    offers = [{"id": "1", "name": "Kartofeln und Kartofelnsalat", "price": 1.0}]
+    offers = [{"id": "1", "name": "Kartofeln und Kartofelnsalat", "price": 1.0}, {"id": "2", "name": "Kartoffeln", "price": 1.0}]
     out = Normalizer(llm=FakeLLM({"Kartofeln": "Kartoffeln"})).offers(offers)
     assert out[0]["name"] == "Kartoffeln und Kartofelnsalat"
+
+
+def test_fix_without_evidence_in_other_texts_is_not_applied_directly():
+    offers = [{"id": "1", "name": "Gekochte Kartofeln", "price": 1.0}]  # "Kartoffeln" kommt sonst nirgends vor
+    assert Normalizer(llm=FakeLLM(FIX)).offers(offers)[0]["name"] == "Gekochte Kartofeln"
+    llm = FakeLLM(FIX, choose=lambda payload: "a" if payload["a"] == "Gekochte Kartoffeln" else "b")
+    out = Normalizer(llm=llm, judge_budget=60).offers(offers)  # Zweitmeinung entscheidet
+    assert len(llm.judged) == 1 and out[0]["name"] == "Gekochte Kartoffeln"
+
+
+def test_vocabulary_evidence_is_remembered_between_runs(tmp_path):
+    cache = tmp_path / "c.json"
+    Normalizer(llm=FakeLLM(), cache_path=cache).offers([{"id": "1", "name": "Frische Kartoffeln", "price": 1.0}])
+    later = [{"id": "2", "name": "Gekochte Kartofeln", "price": 1.0}]
+    assert Normalizer(llm=FakeLLM(FIX), cache_path=cache).offers(later)[0]["name"] == "Gekochte Kartoffeln"
+
+
+def test_case_only_and_abbreviation_suggestions_are_ignored():
+    offers = [
+        {"id": "1", "name": "Frischer Schweinenackenbraten", "price": 1.0},
+        {"id": "2", "name": "Versch. Sorten", "price": 1.0},
+        {"id": "3", "name": "Verschiedene Sorten", "price": 1.0},
+    ]
+    llm = FakeLLM({"Schweinenackenbraten": "schweinenackenbraten", "Versch": "Verschiedene"}, choose=lambda p: "b")
+    out = Normalizer(llm=llm, judge_budget=60).offers(offers)
+    assert [o["name"] for o in out] == ["Frischer Schweinenackenbraten", "Versch. Sorten", "Verschiedene Sorten"]
+    assert llm.judged == []
 
 
 def test_unplausible_fix_is_dropped_without_judge():

@@ -23,6 +23,7 @@ BATCH_SIZE = 16
 MIN_TYPO_LENGTH = 6  # kürzere Wörter ändert nur eine Zweitmeinung, nie die Prüfung allein
 MODEL_FIELDS = ("name", "description")  # ``brand`` (Eigenname) und ``notes`` (feste Formeln) nur per Regeln
 JUDGE_MINUTES = 30  # Zeitbudget je Lauf für Zweitmeinungen (Thinking ist auf der CPU langsam)
+LOGIC_VERSION = 2  # erhöhen, wenn sich die Entscheidungslogik ändert: entwertet gespeicherte Ergebnisse
 DEFAULT_MODEL = "gemma4:e4b"
 DEFAULT_CACHE = Path(os.environ.get("ANGEBOTE_CACHE") or Path.home() / ".cache" / "angebote" / "normalize.json")
 _LETTERS = re.compile(r"[^\W\d_]+")
@@ -108,13 +109,19 @@ def _parts(text):
     return [p.lower() for p in _LETTERS.findall(text) if len(p) >= MIN_TYPO_LENGTH]
 
 
-def _apply(text, fixes):
+def _usable(fix, abbreviations):
+    """Nur echte Wortkorrekturen: nicht leer, keine Abkürzung (``Versch.``), nicht nur Groß-/Kleinschreibung (das machen die Regeln)."""
+    wrong, right = fix["wort"].strip(), fix["korrekt"].strip()
+    return bool(wrong and right) and wrong.lower() != right.lower() and wrong.lower().strip(".") not in abbreviations
+
+
+def _apply(text, fixes, abbreviations=frozenset()):
     """Text mit den gemeldeten Korrekturen oder ``None``, wenn keine auf ein ganzes Wort des Textes passt."""
     changed = False
     for fix in fixes:
-        wrong, right = fix["wort"].strip(), fix["korrekt"].strip()
-        if not wrong or not right or wrong == right:
+        if not _usable(fix, abbreviations):
             continue
+        wrong, right = fix["wort"].strip(), fix["korrekt"].strip()
         found = re.compile(r"(?<![^\W\d_])%s(?![^\W\d_])" % re.escape(wrong))
         text, count = found.subn(lambda _: right, text)
         changed = changed or count > 0
@@ -129,10 +136,13 @@ class Normalizer:
         self.log = log or (lambda message: None)
         self.prompt, self.judge_prompt = locale.prompt, locale.judge_prompt
         self.judge_budget, self._judge_spent = judge_budget, 0.0
-        self.stats = dict.fromkeys(("texts", "skipped", "asked", "fixed", "rejected", "judged", "judge_took_change", "pending", "rules_only"), 0)
+        self.stats = dict.fromkeys(
+            ("texts", "skipped", "asked", "fixed", "rejected", "judged", "judge_took_change", "pending", "rules_only"), 0
+        )
         self._cache = self._load()
         prompts = hashlib.sha1((self.prompt + self.judge_prompt).encode()).hexdigest()
-        self._salt = f"{llm.model if llm else ''}|{prompts}"
+        self._salt = f"{llm.model if llm else ''}|{prompts}|v{LOGIC_VERSION}"
+        self._vocab = set((self._cache.get(self._key("\0vocab")) or {}).get("words", []))
 
     def _load(self):
         try:
@@ -158,6 +168,10 @@ class Normalizer:
     def _pending(self, text):
         value = self._cache.get(self._key(text))
         return value["pending"] if isinstance(value, dict) else None
+
+    def _confirmed(self, fixes):
+        """Kommen die korrigierten Wörter schon in anderen Texten vor? Sonst fehlt der Beleg für die Korrektur."""
+        return all(p in self._vocab for f in fixes for p in _parts(f["korrekt"]))
 
     def _known(self, part):
         return self._cache.get(self._key("wort|" + part)) == 1
@@ -186,11 +200,11 @@ class Normalizer:
                 return
             self.stats["asked"] += len(batch)
             for index, text in enumerate(batch, 1):
-                own = [f for f in fixes if f["id"] == index]
-                candidate = _apply(text, own)
+                own = [f for f in fixes if f["id"] == index and _usable(f, self.locale.abbreviations)]
+                candidate = _apply(text, own, self.locale.abbreviations)
                 if candidate is None:
                     self._cache[self._key(text)] = text
-                elif validate(text, candidate):
+                elif validate(text, candidate) and self._confirmed(own):
                     self._cache[self._key(text)] = candidate
                     self.stats["fixed"] += 1
                 elif self.judge_budget and hard_ok(text, candidate):
@@ -254,6 +268,9 @@ class Normalizer:
                     context.setdefault(offer[field], (field, offer))
         texts = list(context)
         self.stats["texts"] += len(texts)
+        for text in texts:
+            self._vocab.update(_parts(text))
+        self._cache[self._key("\0vocab")] = {"words": sorted(self._vocab)}
         mapping = self._resolve(texts, context)
         return [dict(o, **{f: mapping[o[f]] for f in MODEL_FIELDS if f in o}) for o in cleaned]
 
