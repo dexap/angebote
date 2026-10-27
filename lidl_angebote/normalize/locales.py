@@ -20,6 +20,8 @@ class Locale:
     date_format: str  # strftime
     abbreviations: frozenset  # Wörter, deren Schlusspunkt zur Abkürzung gehört
     shouting_min_letters: int = 5  # GROSSGESCHRIEBENE Wörter ab so vielen Buchstaben werden normal geschrieben (kürzere sind meist Kürzel)
+    expansions: tuple = ()  # (Abkürzung, ausgeschrieben): "versch." -> "verschiedene"; ohne Punkt im Schlüssel gilt auch das Wort allein
+    phrase_expansions: tuple = ()  # dasselbe für Abkürzungen aus mehreren Teilen: "z. B." -> "zum Beispiel"
 
     @property
     def prompt(self):
@@ -48,6 +50,38 @@ DE = Locale(
     date_format="%d.%m.%Y",
     abbreviations=frozenset(
         "stk st pck pckg pkg ca inkl zzgl versch vol max min mind ggf bzw evtl etc nr usw u a z b d h".split()
+    ),
+    expansions=(
+        ("versch.", "verschiedene"),
+        ("zzgl.", "zuzüglich"),
+        ("inkl.", "inklusive"),
+        ("ca.", "circa"),
+        ("max.", "maximal"),
+        ("mind.", "mindestens"),
+        ("ggf.", "gegebenenfalls"),
+        ("bzw.", "beziehungsweise"),
+        ("evtl.", "eventuell"),
+        ("usw.", "und so weiter"),
+        ("nr.", "Nummer"),
+        ("tw.", "teilweise"),
+        ("teilw.", "teilweise"),
+        ("kl.", "Klasse"),
+        ("gr.", "Größe"),
+        ("fl.", "Flasche"),
+        ("st.", "Stück"),
+        ("stk.", "Stück"),
+        ("stck", "Stück"),
+        ("stck.", "Stück"),
+        ("pck.", "Packung"),
+        ("pckg.", "Packung"),
+        ("pkg.", "Packung"),
+    ),
+    phrase_expansions=(
+        ("z. B.", "zum Beispiel"),
+        ("d. h.", "das heißt"),
+        ("u. a.", "unter anderem"),
+        ("i. Tr.", "in der Trockenmasse"),
+        ("o. Abb.", "ohne Abbildung"),
     ),
 )
 

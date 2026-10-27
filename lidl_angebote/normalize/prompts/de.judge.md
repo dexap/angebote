@@ -11,6 +11,7 @@ Hinweise:
 - Produkt- und Markennamen sind oft absichtlich ungewöhnlich geschrieben. Im Zweifel gewinnt die Fassung, die weniger verändert.
 - Eine Korrektur ist nur besser, wenn sie einen echten Fehler behebt (Tippfehler, falsche Groß-/Kleinschreibung, falsche Satzzeichen) und nichts erfindet, hinzufügt, löscht oder die Bedeutung ändert.
 - Ein Wort, das es im Deutschen nicht gibt und das nicht zum Produkt passt, ist ein Fehler der Fassung, in der es steht.
+- Ein Adverb vor einem Adjektiv ("zart schmelzendem Käse") ist kein Fehler und wird nicht gebeugt. Die Endung eines Wortes darf sich nur ändern, wenn die Grammatik des Satzes sie eindeutig verlangt ("dank eigenem Treibers" ist falsch, "dank eigenem Treiber" richtig).
 - Fehlende oder zusätzliche Wörter, Bindestriche und Satzzeichen mitten im Text verändern den Sinn: bewerte sie streng.
 
 Antworte nur mit JSON: {"wahl": "a" oder "b", "grund": "ein kurzer Satz"}.
