@@ -23,7 +23,7 @@ BATCH_SIZE = 16
 MIN_TYPO_LENGTH = 6  # kürzere Wörter ändert nur eine Zweitmeinung, nie die Prüfung allein
 MODEL_FIELDS = ("name", "description")  # ``brand`` (Eigenname) und ``notes`` (feste Formeln) nur per Regeln
 JUDGE_MINUTES = 30  # Zeitbudget je Lauf für Zweitmeinungen (Thinking ist auf der CPU langsam)
-LOGIC_VERSION = 2  # erhöhen, wenn sich die Entscheidungslogik ändert: entwertet gespeicherte Ergebnisse
+LOGIC_VERSION = 3  # erhöhen, wenn sich die Entscheidungslogik ändert: entwertet gespeicherte Ergebnisse
 DEFAULT_MODEL = "gemma4:e4b"
 DEFAULT_CACHE = Path(os.environ.get("ANGEBOTE_CACHE") or Path.home() / ".cache" / "angebote" / "normalize.json")
 _LETTERS = re.compile(r"[^\W\d_]+")
@@ -82,11 +82,20 @@ def _word_ok(old, new):
     return _is_typo_fix(old, new)
 
 
+def _inflected(original, candidate):
+    """Ändert sich bei gleicher Wortzahl die Endung eines Wortes (Beugung: Wurzel -> Wurzeln)? Das beurteilt das Modell unzuverlässig."""
+    old, new = original.split(), candidate.split()
+    return len(old) == len(new) and any(
+        _core(a) != _core(b) and _core(a).lower() != _core(b).lower() and _core(a)[-2:].lower() != _core(b)[-2:].lower()
+        for a, b in zip(old, new)
+    )
+
+
 def hard_ok(original, candidate):
-    """Untergrenze, die auch die Zweitmeinung nicht kippt: keine Umbrüche/Escapes, Ziffern unverändert."""
+    """Untergrenze, die auch die Zweitmeinung nicht kippt: keine Umbrüche/Escapes, Ziffern und Wortendungen unverändert."""
     if not candidate.strip() or "\n" in candidate or "\\" in candidate:
         return False
-    return _digits(original) == _digits(candidate)
+    return _digits(original) == _digits(candidate) and not _inflected(original, candidate)
 
 
 def validate(original, candidate):

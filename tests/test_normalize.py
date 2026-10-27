@@ -293,6 +293,24 @@ def test_changed_digits_never_reach_the_judge():
     assert llm.judged == [] and out[0]["name"] == ORIGINAL
 
 
+@pytest.mark.parametrize(
+    "original, candidate",
+    [
+        ("Deutsche bunte Salate mit Wurzel", "Deutsche bunte Salate mit Wurzeln"),
+        ("Mit zart schmelzendem Käse", "Mit zartem schmelzendem Käse"),
+        ("Center-Kanal-Treibers", "Center-Kanal-Treiber"),
+    ],
+)
+def test_changed_word_endings_never_reach_the_judge(original, candidate):
+    offers = [{"id": "1", "name": original, "price": 1.0}]
+    letters = lambda text: re.findall(r"[^\W\d_]+", text)  # noqa: E731
+    fixes = {w: c for w, c in zip(letters(original), letters(candidate)) if w != c}
+    assert fixes  # der Test meldet wirklich eine Korrektur
+    llm = FakeLLM(fixes, choose=lambda p: "b")
+    out = Normalizer(llm=llm, judge_budget=60).offers(offers)
+    assert llm.judged == [] and out[0]["name"] == original
+
+
 def test_no_judge_budget_means_no_second_opinion():
     llm = FakeLLM(TWO_EDITS, choose=takes_change)
     out = Normalizer(llm=llm).offers(JOFFERS)
