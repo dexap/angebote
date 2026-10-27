@@ -54,6 +54,10 @@ def _unit_price(value):
     )
 
 
+def _https_url(value):
+    return _nonempty_str(value) and value.startswith("https://") and " " not in value
+
+
 def _percent(value):
     return isinstance(value, int) and not isinstance(value, bool) and 0 < value < 100
 
@@ -77,6 +81,7 @@ REQUIRED = {
 OPTIONAL = {
     "brand": _nonempty_str,
     "description": _nonempty_str,
+    "image_url": _https_url,  # Produktbild von kaufda
     "regular_price": _price,  # durchgestrichener Normalpreis, sonst UVP
     "special_price": _price,  # Preis mit Kundenkarte/Bonus (Lidl Plus, REWE Bonus), immer < price
     "special_price_condition": _nonempty_str,

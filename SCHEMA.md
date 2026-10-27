@@ -20,6 +20,7 @@ Alle Händler (`lidl`, `rewe`, `penny`, …) geben **dasselbe Schema** aus: `ret
 | Feld | Typ | Bedeutung |
 |---|---|---|
 | `brand`, `description` | string | Marke; Beschreibung/Packungsgröße |
+| `image_url` | string | Produktbild (https) von kaufda; fehlt, wenn kaufda keins liefert |
 | `regular_price` | number | Vergleichspreis: durchgestrichener Normalpreis, sonst die unverbindliche Preisempfehlung (UVP) |
 | `discount_percent` | int | Rabatt gegenüber `regular_price` (nur mit diesem) |
 | `special_price` | number | **Preis mit Kundenkarte/Bonus** (immer < `price`), siehe unten |

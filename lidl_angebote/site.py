@@ -14,7 +14,7 @@ import json
 from datetime import date, timedelta
 from pathlib import Path
 
-from . import check, kaufda, retailers, scraper
+from . import check, kaufda, normalize, retailers, scraper
 
 WEEKS = {"": 0, "/next": 7}  # Pfad-Suffix -> Tage ab heute
 ALL = "all"
@@ -35,7 +35,7 @@ def _index_html(paths):
     )
 
 
-def build_site(out_dir, today, fetch=None):
+def build_site(out_dir, today, fetch=None, transform=None):
     out = Path(out_dir)
     results = {}
     for key, config in retailers.RETAILERS.items():
@@ -43,6 +43,9 @@ def build_site(out_dir, today, fetch=None):
         for suffix, days in WEEKS.items():
             offers = _offers(today + timedelta(days=days), fetch, loaded, config)
             check.ensure_valid(offers, label=f"{key}{suffix}")
+            if transform:
+                offers = transform(offers)
+                check.ensure_valid(offers, label=f"{key}{suffix} (normalisiert)")
             results[key + suffix] = offers
     for suffix in WEEKS:
         results[ALL + suffix] = [o for key in retailers.RETAILERS for o in results[key + suffix]]
@@ -61,11 +64,16 @@ def main(argv=None):
     parser = argparse.ArgumentParser(prog="lidl-angebote-site", description="Statische JSON-API bauen.")
     parser.add_argument("--out", default="_site", help="Zielverzeichnis (Standard: _site)")
     parser.add_argument("--date", type=date.fromisoformat, default=kaufda.today(), help="Stichtag (YYYY-MM-DD)")
+    parser.add_argument("--normalize", action="store_true", help="Texte normalisieren (Regeln + lokales Sprachmodell)")
+    normalize.add_arguments(parser)
     args = parser.parse_args(argv)
 
-    counts = build_site(args.out, args.date)
+    normalizer = normalize.from_args(args) if args.normalize else None
+    counts = build_site(args.out, args.date, transform=normalizer and normalizer.offers)
     for path, count in counts.items():
         print(f"{path}: {count} Angebote")
+    if normalizer:
+        print(f"Normalisierung: {normalizer.stats}")
     return 0
 
 

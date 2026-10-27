@@ -142,6 +142,7 @@ def test_offer_record_has_all_fields(brochure_pages):
         "name": "Kiwi, lose",
         "brand": "Zespri",
         "description": "Neuseeland Green Kiwifruit, Klasse I",
+        "image_url": "https://content-media.bonial.biz/b6f42850-e0af-46e3-93f4-b3f2503a3ae8/7f7cfd85-e57a-4b9a-8e82-4e5c6ae206b7.jpg",
         "price": 0.44,
         "regular_price": 0.49,
         "discount_percent": 10,
@@ -241,3 +242,11 @@ def test_notes_combine_conditions_and_extras_without_duplicates(brochure_pages):
     assert o["notes"] == ["Je Stück"]
     licor = _by_name(_offers(brochure_pages), "LICOR 43")
     assert licor["notes"] == ["Licor 43 kaufen H-Milch gratis dazu"]
+
+
+def test_offer_without_product_image_has_no_image_url(brochure_pages):
+    for page in brochure_pages["contents"]:
+        for item in page["offers"]:
+            for product in item["content"].get("products", []):
+                product["images"] = []
+    assert all("image_url" not in o for o in _offers(brochure_pages))

@@ -132,6 +132,13 @@ def parse_unit_price(text):
     return {"amount": amount, "unit": unit, "quantity": int(quantity) if quantity == int(quantity) else quantity}
 
 
+def _image_url(product):
+    for image in product.get("images") or []:
+        if image.get("url"):
+            return image["url"]
+    return None
+
+
 def _flat_path(category_paths):
     """Viewer-API liefert einen flachen Pfad, die SEO-Seite eine Liste von Pfaden."""
     if category_paths and isinstance(category_paths[0], list):
@@ -199,6 +206,7 @@ def _record(content, product, deals, index, multi, validity, retailer):
         "name": product["name"].replace("\xad", ""),
         "brand": product.get("brandName"),
         "description": " ".join(p["paragraph"].strip() for p in product.get("description", []) if p.get("paragraph")),
+        "image_url": _image_url(product),
         "price": price,
         "regular_price": reference,
         "special_price": special_price,

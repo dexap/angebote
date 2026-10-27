@@ -10,6 +10,7 @@ GOOD = {
     "id": "abc",
     "name": "Kiwi",
     "brand": "Zespri",
+    "image_url": "https://content-media.bonial.biz/a/b.jpg",
     "description": "Neuseeland",
     "price": 0.44,
     "regular_price": 0.60,
@@ -84,6 +85,8 @@ def test_minimal_offer_without_optional_fields_is_valid():
         ({"conditions": ["Je Stück"]}, "conditions"),
         ({"extras": ["x"]}, "extras"),
         ({"image": "https://x/y.jpg"}, "image"),
+        ({"image_url": "http://x/y.jpg"}, "image_url"),
+        ({"image_url": ""}, "image_url"),
         ({"category_path": ["Obst"]}, "category_path"),
     ],
 )

@@ -20,7 +20,7 @@ Optionen: `--retailer lidl|rewe|penny`, `--date YYYY-MM-DD`, `--next` (Woche dan
 
 ## JSON-API
 
-Der Workflow `.github/workflows/pages.yml` baut täglich (und bei jedem Push auf `main`) eine statische API und veröffentlicht sie auf GitHub Pages. Inhalt ist jeweils nur die Liste der Angebote, ohne Prospekt `[]`. Alle Händler liefern dasselbe Schema – siehe [SCHEMA.md](SCHEMA.md).
+Der Workflow `.github/workflows/pages.yml` baut täglich (und bei jedem Push auf `main`) eine statische API und veröffentlicht sie auf GitHub Pages. Tests laufen auf GitHub, Scrapen und Normalisieren auf dem Homeserver (self-hosted Runner, siehe [Normalisierung](#normalisierung)), der Deploy wieder auf GitHub. Inhalt ist jeweils nur die Liste der Angebote, ohne Prospekt `[]`. Alle Händler liefern dasselbe Schema – siehe [SCHEMA.md](SCHEMA.md).
 
 | URL | Inhalt |
 |---|---|
@@ -35,6 +35,28 @@ Einmalig nötig: *Settings → Pages → Build and deployment → Source: GitHub
 Lokal bauen: `python3 -m lidl_angebote.site --out _site`
 
 Neue Händler: siehe [SCHEMA.md](SCHEMA.md) (Abschnitt „Neuer Händler“).
+
+### Normalisierung
+
+Vor dem Veröffentlichen werden die Texte (`name`, `description`, `notes`, `brand`) bereinigt. Zahlen, Preise und Daten fasst nur der Regel-Teil an.
+
+1. **Regeln** (`lidl_angebote/normalize/rules.py`): `\n`/Escapes, Leerzeichen, Satzpunkte am Ende (Abkürzungen wie „Stk.“ bleiben), `0.25` → `0,25`, `500g` → `500 g`, `0,99€` → `0,99 €`.
+2. **Sprachmodell** (`name`, `description`): [Ollama](https://ollama.com) mit `qwen3.5:2b` auf dem Homeserver, Prompt in `normalize/prompts/de.md`. Das Modell darf nur einzelne Wörter ändern (Groß-/Kleinschreibung, Tippfehler bei langen Wörtern, Satzzeichen am Textende). Jede andere Änderung (Ziffern, Wörter hinzu/weg, Bindestriche, erfundene Wörter) verwirft `validate()`; dann bleibt der Regeltext.
+3. **Cache** je Text unter `~/.cache/angebote/normalize.json` (`ANGEBOTE_CACHE`): nur neue Texte gehen ans Modell. Erster Lauf ca. 1 h (CPU), danach Sekunden.
+4. **Ausfall**: Ist Ollama nicht erreichbar, läuft der Build nur mit Regeln und meldet `::warning::`.
+
+**Sprachen:** `normalize/locales.py` (`Locale`: Dezimaltrenner, Währung, Datumsformat, Abkürzungen) und `normalize/prompts/<code>.md`. Eine neue Sprache braucht beides, dann `--lang <code>`.
+
+```bash
+python3 -m lidl_angebote.site --out _site --normalize   # wie im Workflow
+python3 -m lidl_angebote.normalize all.json              # einzelne Datei, Ausgabe auf stdout
+python3 -m lidl_angebote.normalize --help                # --no-llm, --model, --ollama-url, --cache, --lang
+```
+
+**Betrieb auf dem Homeserver**
+
+- Ollama: `docker run -d --name ollama --restart unless-stopped -p 127.0.0.1:11434:11434 -v ollama:/root/.ollama ollama/ollama` und `docker exec ollama ollama pull qwen3.5:2b`
+- Runner: `~/actions-runner` (Label `homeserver`), User-Service `systemctl --user status github-runner`. Der Pages-Workflow läuft nur bei `schedule`, `push` und `workflow_dispatch`, nie bei Pull Requests, damit fremder Code nicht auf dem Server landet.
 
 ### Schema-Checkup
 
