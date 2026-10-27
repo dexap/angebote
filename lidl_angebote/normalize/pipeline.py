@@ -1,12 +1,17 @@
-"""Angebote normalisieren: Regeln, dann (optional) Sprachmodell mit Validierung und Cache."""
+"""Angebote normalisieren: Regeln, dann (optional) Tippfehler-Prüfung durch ein kleines Sprachmodell.
+
+Das Modell bekommt nur nummerierte Texte mit unbekannten Wörtern und meldet nur Korrekturen
+(``wort`` -> ``korrekt``); Python wendet sie an und prüft sie (``validate``). Bei Bedenken
+entscheidet eine zweite Runde mit Thinking (``judge``) zwischen Original und Korrektur.
+"""
 
 import argparse
-import difflib
 import hashlib
 import json
 import os
 import re
 import sys
+import time
 from pathlib import Path
 
 from . import rules
@@ -14,10 +19,13 @@ from .llm import Ollama, OllamaError
 from .locales import DEFAULT, LOCALES, get_locale
 
 PUNCTUATION = ".,;:!?"
-BATCH_SIZE = 8
-MIN_WORD_SIMILARITY = 0.93  # Buchstabenänderungen nur bei langen Wörtern mit einem Tippfehler (Neuerfindung nein)
+BATCH_SIZE = 16
+MIN_TYPO_LENGTH = 6  # kürzere Wörter ändert nur eine Zweitmeinung, nie die Prüfung allein
 MODEL_FIELDS = ("name", "description")  # ``brand`` (Eigenname) und ``notes`` (feste Formeln) nur per Regeln
+JUDGE_MINUTES = 30  # Zeitbudget je Lauf für Zweitmeinungen (Thinking ist auf der CPU langsam)
+DEFAULT_MODEL = "gemma4:e4b"
 DEFAULT_CACHE = Path(os.environ.get("ANGEBOTE_CACHE") or Path.home() / ".cache" / "angebote" / "normalize.json")
+_LETTERS = re.compile(r"[^\W\d_]+")
 
 
 def _digits(text):
@@ -32,6 +40,34 @@ def _tail(word):
     return word[len(word.rstrip(PUNCTUATION)) :]
 
 
+def _osa(a, b):
+    """Edit-Distanz (Einfügen, Löschen, Ersetzen, Vertauschen zweier Nachbarn = je 1)."""
+    d = [[0] * (len(b) + 1) for _ in range(len(a) + 1)]
+    for i in range(len(a) + 1):
+        d[i][0] = i
+    for j in range(len(b) + 1):
+        d[0][j] = j
+    for i in range(1, len(a) + 1):
+        for j in range(1, len(b) + 1):
+            d[i][j] = min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] != b[j - 1]))
+            if i > 1 and j > 1 and a[i - 1] == b[j - 2] and a[i - 2] == b[j - 1]:
+                d[i][j] = min(d[i][j], d[i - 2][j - 2] + 1)
+    return d[-1][-1]
+
+
+def _is_typo_fix(old, new):
+    """Ein Tippfehler: langes Wort, genau eine Änderung, gleicher Anfang und gleiche Endung (keine Beugung)."""
+    a, b = old.lower(), new.lower()
+    return (
+        len(old) >= MIN_TYPO_LENGTH
+        and bool(b)
+        and a[0] == b[0]
+        and a[-2:] == b[-2:]
+        and old.count("-") == new.count("-")
+        and _osa(a, b) == 1
+    )
+
+
 def _title(word):
     return "-".join(part.capitalize() for part in word.split("-"))
 
@@ -42,44 +78,61 @@ def _word_ok(old, new):
         return True
     if old.lower() == new.lower():
         return new == new.lower() or new == new[0].upper() + new[1:].lower() or (old.isupper() and new == _title(new))
-    if old.count("-") != new.count("-"):
+    return _is_typo_fix(old, new)
+
+
+def hard_ok(original, candidate):
+    """Untergrenze, die auch die Zweitmeinung nicht kippt: keine Umbrüche/Escapes, Ziffern unverändert."""
+    if not candidate.strip() or "\n" in candidate or "\\" in candidate:
         return False
-    return difflib.SequenceMatcher(None, old, new).ratio() >= MIN_WORD_SIMILARITY
+    return _digits(original) == _digits(candidate)
 
 
 def validate(original, candidate):
-    """Übernimmt der Regeltext das Modellergebnis?
-
-    Erlaubt sind nur Änderungen einzelner Wörter (siehe ``_word_ok``). Wörter hinzufügen, löschen,
-    zusammenziehen oder Ziffern ändern darf das Modell nicht; dann bleibt der Regeltext.
-    """
-    if not candidate.strip() or "\n" in candidate or "\\" in candidate:
-        return False
-    if _digits(original) != _digits(candidate):
+    """Übernimmt der Regeltext die Korrektur? Nur Änderungen einzelner Wörter (siehe ``_word_ok``) sind erlaubt."""
+    if not hard_ok(original, candidate):
         return False
     old, new = original.split(), candidate.split()
-    for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, old, new, autojunk=False).get_opcodes():
-        if tag == "equal":
-            continue
-        if tag != "replace" or i2 - i1 != j2 - j1:
+    if len(old) != len(new):
+        return False
+    for i, (a, b) in enumerate(zip(old, new)):
+        if not _word_ok(_core(a), _core(b)):
             return False
-        for offset, (a, b) in enumerate(zip(old[i1:i2], new[j1:j2])):
-            if not _word_ok(_core(a), _core(b)):
-                return False
-            if i1 + offset < len(old) - 1 and _tail(a) != _tail(b):  # nur am Textende dürfen Satzzeichen wegfallen
-                return False
+        if i < len(old) - 1 and _tail(a) != _tail(b):  # nur am Textende dürfen Satzzeichen wegfallen
+            return False
     return True
 
 
+def _parts(text):
+    """Prüfbare Wortteile (klein geschrieben): Buchstabenfolgen ab ``MIN_TYPO_LENGTH``, auch in ``Deutschland/Italien``."""
+    return [p.lower() for p in _LETTERS.findall(text) if len(p) >= MIN_TYPO_LENGTH]
+
+
+def _apply(text, fixes):
+    """Text mit den gemeldeten Korrekturen oder ``None``, wenn keine auf ein ganzes Wort des Textes passt."""
+    changed = False
+    for fix in fixes:
+        wrong, right = fix["wort"].strip(), fix["korrekt"].strip()
+        if not wrong or not right or wrong == right:
+            continue
+        found = re.compile(r"(?<![^\W\d_])%s(?![^\W\d_])" % re.escape(wrong))
+        text, count = found.subn(lambda _: right, text)
+        changed = changed or count > 0
+    return text if changed else None
+
+
 class Normalizer:
-    def __init__(self, locale=DEFAULT, llm=None, cache_path=None, log=None):
+    def __init__(self, locale=DEFAULT, llm=None, cache_path=None, log=None, judge_budget=0):
+        """``judge_budget``: Sekunden je Lauf für die Zweitmeinung (0 = aus)."""
         self.locale, self.llm = locale, llm
         self.cache_path = Path(cache_path) if cache_path else None
         self.log = log or (lambda message: None)
-        self.prompt = locale.prompt
-        self.stats = {"texts": 0, "cached": 0, "model": 0, "kept": 0, "rules_only": 0}
+        self.prompt, self.judge_prompt = locale.prompt, locale.judge_prompt
+        self.judge_budget, self._judge_spent = judge_budget, 0.0
+        self.stats = dict.fromkeys(("texts", "skipped", "asked", "fixed", "rejected", "judged", "judge_took_change", "pending", "rules_only"), 0)
         self._cache = self._load()
-        self._salt = f"{llm.model if llm else ''}|{hashlib.sha1(self.prompt.encode()).hexdigest()}"
+        prompts = hashlib.sha1((self.prompt + self.judge_prompt).encode()).hexdigest()
+        self._salt = f"{llm.model if llm else ''}|{prompts}"
 
     def _load(self):
         try:
@@ -98,53 +151,115 @@ class Normalizer:
     def _key(self, text):
         return hashlib.sha1(f"{self._salt}|{self.locale.code}|{text}".encode()).hexdigest()
 
-    def _ask(self, texts):
-        """Modellantwort je Text oder ``None`` (Länge falsch); Einzelanfrage als Rückfall."""
-        answer = self.llm.correct(self.prompt, texts)
-        if len(answer) == len(texts):
-            return answer
-        if len(texts) == 1:
-            return [None]
-        return [r for text in texts for r in self._ask([text])]
+    def _final(self, text):
+        value = self._cache.get(self._key(text))
+        return value if isinstance(value, str) else None
 
-    def _resolve(self, texts):
+    def _pending(self, text):
+        value = self._cache.get(self._key(text))
+        return value["pending"] if isinstance(value, dict) else None
+
+    def _known(self, part):
+        return self._cache.get(self._key("wort|" + part)) == 1
+
+    def _unknown_parts(self, text):
+        return [p for p in _parts(text) if not self._known(p)]
+
+    def _learn(self, text, fixed_words=()):
+        """Die Wörter des Textes gelten als geprüft (außer den korrigierten)."""
+        skip = {w.lower() for w in fixed_words}
+        for part in _parts(text):
+            if part not in skip:
+                self._cache[self._key("wort|" + part)] = 1
+
+    def _first_pass(self, texts):
+        """Fragt das Modell nach Tippfehlern; unplausible Vorschläge werden für die Zweitmeinung vorgemerkt."""
+        todo = [t for t in texts if self._final(t) is None and self._pending(t) is None and self._unknown_parts(t)]
+        self.stats["skipped"] += len(texts) - len(todo)
+        for start in range(0, len(todo), BATCH_SIZE):
+            batch = todo[start : start + BATCH_SIZE]
+            try:
+                fixes = self.llm.typos(self.prompt, batch)
+            except OllamaError as e:
+                self.log(f"Warnung: {e}; Rest nur mit Regeln")
+                self.llm = None
+                return
+            self.stats["asked"] += len(batch)
+            for index, text in enumerate(batch, 1):
+                own = [f for f in fixes if f["id"] == index]
+                candidate = _apply(text, own)
+                if candidate is None:
+                    self._cache[self._key(text)] = text
+                elif validate(text, candidate):
+                    self._cache[self._key(text)] = candidate
+                    self.stats["fixed"] += 1
+                elif self.judge_budget and hard_ok(text, candidate):
+                    self._cache[self._key(text)] = {"pending": candidate}
+                else:
+                    self._cache[self._key(text)] = text
+                    self.stats["rejected"] += 1
+                self._learn(text, [f["wort"] for f in own])
+            self._save()
+            self.log(f"{min(start + BATCH_SIZE, len(todo))}/{len(todo)} Texte auf Tippfehler geprüft")
+
+    def _judge(self, text, context):
+        """Zweitmeinung (Thinking) zwischen Regeltext und Korrektur; Reihenfolge je Text zufällig, aber stabil."""
+        field, offer = context[text]
+        change = self._pending(text)
+        swap = int(hashlib.sha1(text.encode()).hexdigest(), 16) % 2 == 1
+        a, b = (change, text) if swap else (text, change)
+        started = time.monotonic()
+        try:
+            choice = self.llm.judge(self.judge_prompt, {"feld": field, "angebot": offer, "a": a, "b": b})
+        finally:
+            self._judge_spent += time.monotonic() - started
+        picked = {"a": a, "b": b}.get(choice, text)  # keine verwertbare Antwort: Original behalten
+        self._cache[self._key(text)] = picked
+        self.stats["judged"] += 1
+        self.stats["judge_took_change"] += picked == change
+        self._save()
+
+    def _second_pass(self, texts, context):
+        pending = [t for t in texts if self._pending(t) is not None]
+        for index, text in enumerate(pending):
+            if self._judge_spent >= self.judge_budget:
+                self.stats["pending"] += len(pending) - index
+                self.log(f"{len(pending) - index} Zweitmeinungen verschoben (Zeitbudget aufgebraucht), folgen im nächsten Lauf")
+                return
+            try:
+                self._judge(text, context)
+            except OllamaError as e:
+                self.log(f"Warnung: {e}; Zweitmeinungen verschoben")
+                self.llm = None
+                self.stats["pending"] += len(pending) - index
+                return
+            self.log(f"Zweitmeinung {index + 1}/{len(pending)}: {text!r} -> {self._final(text)!r}")
+
+    def _resolve(self, texts, context):
         """``{regeltext: endtext}`` für alle Texte; füllt den Cache auf."""
-        todo = [t for t in texts if len(t) > 2 and self._key(t) not in self._cache]
-        self.stats["cached"] += len(texts) - len(todo)
         if self.llm is not None:
-            for start in range(0, len(todo), BATCH_SIZE):
-                batch = todo[start : start + BATCH_SIZE]
-                try:
-                    answers = self._ask(batch)
-                except OllamaError as e:
-                    self.log(f"Warnung: {e}; Rest nur mit Regeln")
-                    self.llm = None
-                    break
-                for text, answer in zip(batch, answers):
-                    fixed = rules.clean(answer, self.locale) if answer else ""
-                    ok = bool(fixed) and validate(text, fixed)
-                    self._cache[self._key(text)] = fixed if ok else text
-                    self.stats["model" if ok else "kept"] += 1
-                self._save()
-                self.log(f"{min(start + BATCH_SIZE, len(todo))}/{len(todo)} Texte vom Modell geprüft")
-        self.stats["rules_only"] += sum(1 for t in todo if self._key(t) not in self._cache)
-        return {t: self._cache.get(self._key(t), t) for t in texts}
+            self._first_pass(texts)
+        if self.llm is not None and self.judge_budget:
+            self._second_pass(texts, context)
+        self.stats["rules_only"] += sum(1 for t in texts if self._final(t) is None and self._unknown_parts(t))
+        return {t: self._final(t) or t for t in texts}
 
     def offers(self, offers):
         """Normalisierte Kopie der Angebote (Eingabe bleibt unverändert)."""
         cleaned = [rules.clean_offer_texts(o, self.locale) for o in offers]
-        texts = list(dict.fromkeys(o[f] for o in cleaned for f in MODEL_FIELDS if f in o))
-        self.stats["texts"] += len(texts)
-        mapping = self._resolve(texts)
-        out = []
+        context = {}  # Text -> (Feld, vollständiges Angebot) als Beleg für die Zweitmeinung
         for offer in cleaned:
-            offer = dict(offer, **{f: mapping[offer[f]] for f in MODEL_FIELDS if f in offer})
-            out.append(offer)
-        return out
+            for field in MODEL_FIELDS:
+                if field in offer:
+                    context.setdefault(offer[field], (field, offer))
+        texts = list(context)
+        self.stats["texts"] += len(texts)
+        mapping = self._resolve(texts, context)
+        return [dict(o, **{f: mapping[o[f]] for f in MODEL_FIELDS if f in o}) for o in cleaned]
 
 
-def normalize_offers(offers, locale=DEFAULT, llm=None, cache_path=None):
-    return Normalizer(locale, llm, cache_path).offers(offers)
+def normalize_offers(offers, locale=DEFAULT, llm=None, cache_path=None, judge_budget=0):
+    return Normalizer(locale, llm, cache_path, judge_budget=judge_budget).offers(offers)
 
 
 # --- Kommandozeile ------------------------------------------------------------------------------
@@ -154,8 +269,13 @@ def add_arguments(parser):
     group = parser.add_argument_group("Normalisierung")
     group.add_argument("--lang", default=DEFAULT.code, choices=sorted(LOCALES), help="Sprache (Standard: de)")
     group.add_argument("--no-llm", action="store_true", help="nur Regeln, kein Sprachmodell")
-    group.add_argument("--model", default=os.environ.get("ANGEBOTE_MODEL", "qwen3.5:2b"), help="Ollama-Modell")
+    group.add_argument("--model", default=os.environ.get("ANGEBOTE_MODEL", DEFAULT_MODEL), help=f"Ollama-Modell (Standard: {DEFAULT_MODEL})")
     group.add_argument("--ollama-url", default=os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434"))
+    group.add_argument("--no-judge", action="store_true", help="keine Zweitmeinung (Thinking) bei abgelehnten Korrekturen")
+    group.add_argument(
+        "--judge-minutes", type=float, default=float(os.environ.get("ANGEBOTE_JUDGE_MINUTES", JUDGE_MINUTES)),
+        help=f"Zeitbudget je Lauf für Zweitmeinungen in Minuten (Standard: {JUDGE_MINUTES}); Rest folgt im nächsten Lauf",
+    )
     group.add_argument("--cache", type=Path, default=DEFAULT_CACHE, help=f"Cache-Datei (Standard: {DEFAULT_CACHE})")
 
 
@@ -171,7 +291,8 @@ def from_args(args):
         if not llm.available():
             _log(f"Warnung: Ollama-Modell {args.model} unter {args.ollama_url} nicht erreichbar; nur Regeln")
             llm = None
-    return Normalizer(get_locale(args.lang), llm, args.cache, log=_log)
+    budget = 0 if args.no_judge else args.judge_minutes * 60
+    return Normalizer(get_locale(args.lang), llm, args.cache, log=_log, judge_budget=budget)
 
 
 def main(argv=None):

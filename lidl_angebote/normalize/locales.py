@@ -19,10 +19,15 @@ class Locale:
     currency_after: bool  # "0,99 €" (True) oder "€0.99" (False)
     date_format: str  # strftime
     abbreviations: frozenset  # Wörter, deren Schlusspunkt zur Abkürzung gehört
+    shouting_min_letters: int = 5  # GROSSGESCHRIEBENE Wörter ab so vielen Buchstaben werden normal geschrieben (kürzere sind meist Kürzel)
 
     @property
     def prompt(self):
         return (PROMPTS / f"{self.code}.md").read_text(encoding="utf-8")
+
+    @property
+    def judge_prompt(self):
+        return (PROMPTS / f"{self.code}.judge.md").read_text(encoding="utf-8")
 
     def format_price(self, amount):
         whole, cents = f"{amount:,.2f}".split(".")
@@ -42,7 +47,7 @@ DE = Locale(
     currency_after=True,
     date_format="%d.%m.%Y",
     abbreviations=frozenset(
-        "stk st pck pckg pkg ca inkl zzgl versch vol max min mind ggf bzw evtl etc nr usw u a z b d h g kg ml l cl".split()
+        "stk st pck pckg pkg ca inkl zzgl versch vol max min mind ggf bzw evtl etc nr usw u a z b d h".split()
     ),
 )
 

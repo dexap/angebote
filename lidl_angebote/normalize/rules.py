@@ -1,4 +1,4 @@
-"""Deterministische Textbereinigung (ohne KI): Escapes, Leerzeichen, Satzpunkte, Preisformat."""
+"""Deterministische Textbereinigung (ohne KI): Escapes, Leerzeichen, Satzpunkte, Preisformat, Versalien."""
 
 import re
 
@@ -38,12 +38,31 @@ def _strip_final_period(text, locale):
     return text
 
 
+def _title(word):
+    return "-".join(part.capitalize() for part in word.split("-"))
+
+
+def fix_case(text, locale=DEFAULT):
+    """Versalien-Wörter normal schreiben (``NUTELLA`` -> ``Nutella``) und den Textanfang groß (``je 5 g`` -> ``Je 5 g``)."""
+    words = text.split(" ")
+    for i, word in enumerate(words):
+        core = word.strip(".,;:!?()»«\"'/")
+        letters = core.replace("-", "")
+        if letters.isalpha() and letters.isupper() and len(letters) >= locale.shouting_min_letters:
+            words[i] = word.replace(core, _title(core), 1)
+        elif i == 0 and core[:1].islower() and core.isalpha() and core == core.lower():  # nicht "iPhone", "2-teilig"
+            words[i] = word.replace(core, core[0].upper() + core[1:], 1)
+    return " ".join(words)
+
+
 def clean_offer_texts(offer, locale=DEFAULT):
     """Kopie des Angebots mit bereinigten Textfeldern (``name``, ``brand``, ``description``, ``notes``)."""
     out = dict(offer)
     for field in ("name", "brand", "description"):
         if field in out:
             out[field] = clean(out[field], locale)
+            if field != "brand":  # Marken behalten ihre Schreibweise (TUBORG, REWE)
+                out[field] = fix_case(out[field], locale)
     if "notes" in out:
         out["notes"] = list(dict.fromkeys(n for n in (clean(n, locale) for n in out["notes"]) if n))
     return {k: v for k, v in out.items() if v not in ("", [])}

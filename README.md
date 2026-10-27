@@ -40,10 +40,12 @@ Neue Händler: siehe [SCHEMA.md](SCHEMA.md) (Abschnitt „Neuer Händler“).
 
 Vor dem Veröffentlichen werden die Texte (`name`, `description`, `notes`, `brand`) bereinigt. Zahlen, Preise und Daten fasst nur der Regel-Teil an.
 
-1. **Regeln** (`lidl_angebote/normalize/rules.py`): `\n`/Escapes, Leerzeichen, Satzpunkte am Ende (Abkürzungen wie „Stk.“ bleiben), `0.25` → `0,25`, `500g` → `500 g`, `0,99€` → `0,99 €`.
-2. **Sprachmodell** (`name`, `description`): [Ollama](https://ollama.com) mit `qwen3.5:2b` auf dem Homeserver, Prompt in `normalize/prompts/de.md`. Das Modell darf nur einzelne Wörter ändern (Groß-/Kleinschreibung, Tippfehler bei langen Wörtern, Satzzeichen am Textende). Jede andere Änderung (Ziffern, Wörter hinzu/weg, Bindestriche, erfundene Wörter) verwirft `validate()`; dann bleibt der Regeltext.
-3. **Cache** je Text unter `~/.cache/angebote/normalize.json` (`ANGEBOTE_CACHE`): nur neue Texte gehen ans Modell. Erster Lauf ca. 1 h (CPU), danach Sekunden.
-4. **Ausfall**: Ist Ollama nicht erreichbar, läuft der Build nur mit Regeln und meldet `::warning::`.
+1. **Regeln** (`normalize/rules.py`, ohne KI): `\n`/Escapes, Leerzeichen, Satzpunkte am Ende (Abkürzungen wie „Stk.“ bleiben), `0.25` → `0,25`, `500g` → `500 g`, `0,99€` → `0,99 €`, Versalien-Wörter ab 5 Buchstaben (`NUTELLA` → `Nutella`, nicht bei `brand`), Textanfang groß.
+2. **Tippfehler-Prüfung** (`name`, `description`): [Ollama](https://ollama.com) mit `gemma4:e4b` auf dem Homeserver, Prompt `normalize/prompts/de.md`. Das Modell bekommt nur **nummerierte Texte mit noch ungeprüften Wörtern** (ab 6 Buchstaben) und meldet **nur Korrekturen** (`id`, `wort`, `korrekt`), keine neu geschriebenen Texte. Das spart Ausgabe-Token (auf der CPU der Engpass) und die Zuordnung übernimmt Python. 16 Texte je Anfrage, Kontext 2048, Thinking aus.
+3. **Prüfung** (`validate()`): Eine Korrektur gilt nur bei genau einem geänderten Buchstaben (Einfügen, Löschen, Ersetzen, Vertauschen) in einem Wort ab 6 Buchstaben, mit gleichem Anfang und gleicher Endung (keine Beugung), ohne Änderung von Ziffern, Wortzahl, Bindestrichen oder inneren Satzzeichen.
+4. **Zweitmeinung** (nur wenn die Prüfung eine Korrektur ablehnt): dasselbe Modell mit aktiviertem Thinking bekommt das **vollständige Angebots-JSON** (Notizen, Einheiten, Marke, Kategorie, …) plus beide Fassungen (Reihenfolge stabil gemischt) und wählt die sinnvollere (`prompts/de.judge.md`). Ziffern und Umbrüche kann auch sie nicht ändern (`hard_ok`). Thinking ist langsam: je Lauf gibt es ein Zeitbudget (`--judge-minutes`, Standard 30; `--no-judge` schaltet es ab), Rest folgt im nächsten Lauf.
+5. **Cache** (`~/.cache/angebote/normalize.json`, `ANGEBOTE_CACHE`): je Text und je Wort („schon geprüft“). Nur neue Texte mit unbekannten Wörtern gehen ans Modell.
+6. **Ausfall**: Ist Ollama nicht erreichbar, läuft der Build nur mit Regeln und meldet `::warning::`.
 
 **Sprachen:** `normalize/locales.py` (`Locale`: Dezimaltrenner, Währung, Datumsformat, Abkürzungen) und `normalize/prompts/<code>.md`. Eine neue Sprache braucht beides, dann `--lang <code>`.
 
@@ -55,7 +57,7 @@ python3 -m lidl_angebote.normalize --help                # --no-llm, --model, --
 
 **Betrieb auf dem Homeserver**
 
-- Ollama: `docker run -d --name ollama --restart unless-stopped -p 127.0.0.1:11434:11434 -v ollama:/root/.ollama ollama/ollama` und `docker exec ollama ollama pull qwen3.5:2b`
+- Ollama: `docker run -d --name ollama --restart unless-stopped -p 127.0.0.1:11434:11434 -v ollama:/root/.ollama ollama/ollama` und `docker exec ollama ollama pull gemma4:e4b`
 - Runner: `~/actions-runner` (Label `homeserver`), User-Service `systemctl --user status github-runner`. Der Pages-Workflow läuft nur bei `schedule`, `push` und `workflow_dispatch`, nie bei Pull Requests, damit fremder Code nicht auf dem Server landet.
 
 ### Schema-Checkup
