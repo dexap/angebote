@@ -26,6 +26,7 @@ MODEL_FIELDS = ("name", "description")  # ``brand`` (Eigenname) und ``notes`` (f
 JUDGE_MINUTES = 30  # Zeitbudget je Lauf für Zweitmeinungen (Thinking ist auf der CPU langsam)
 LOGIC_VERSION = 3  # erhöhen, wenn sich die Entscheidungslogik ändert: entwertet gespeicherte Ergebnisse
 DEFAULT_MODEL = "gemma4:e4b"
+DEFAULT_JUDGE_MODEL = "gemma4:e2b"  # Zweitmeinung mit Thinking: im Test gleich gut wie e4b, fast doppelt so schnell
 DEFAULT_CACHE = Path(os.environ.get("ANGEBOTE_CACHE") or Path.home() / ".cache" / "angebote" / "normalize.json")
 _LETTERS = re.compile(r"[^\W\d_]+")
 
@@ -327,6 +328,10 @@ def add_arguments(parser):
     group.add_argument("--lang", default=DEFAULT.code, choices=sorted(LOCALES), help="Sprache (Standard: de)")
     group.add_argument("--no-llm", action="store_true", help="nur Regeln, kein Sprachmodell")
     group.add_argument("--model", default=os.environ.get("ANGEBOTE_MODEL", DEFAULT_MODEL), help=f"Ollama-Modell (Standard: {DEFAULT_MODEL})")
+    group.add_argument(
+        "--judge-model", default=os.environ.get("ANGEBOTE_JUDGE_MODEL", DEFAULT_JUDGE_MODEL),
+        help=f"Modell für die Zweitmeinung (Standard: {DEFAULT_JUDGE_MODEL}); fehlt es, wird das Hauptmodell genommen",
+    )
     group.add_argument("--ollama-url", default=os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434"))
     group.add_argument("--no-judge", action="store_true", help="keine Zweitmeinung (Thinking) bei abgelehnten Korrekturen")
     group.add_argument(
@@ -346,10 +351,13 @@ def _log(message):
 def from_args(args):
     llm = None
     if not args.no_llm:
-        llm = Ollama(args.ollama_url, args.model)
+        llm = Ollama(args.ollama_url, args.model, judge_model=args.judge_model)
         if not llm.available():
             _log(f"Warnung: Ollama-Modell {args.model} unter {args.ollama_url} nicht erreichbar; nur Regeln")
             llm = None
+        elif not llm.available(args.judge_model):
+            _log(f"Warnung: Zweitmeinungs-Modell {args.judge_model} fehlt; nehme {args.model}")
+            llm.judge_model = args.model
     budget = 0 if args.no_judge else args.judge_minutes * 60
     corrections = None if args.no_corrections else Corrections(args.corrections or default_path(args.lang), log=_log)
     return Normalizer(get_locale(args.lang), llm, args.cache, log=_log, judge_budget=budget, corrections=corrections)

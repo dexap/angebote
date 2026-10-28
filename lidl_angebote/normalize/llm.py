@@ -31,8 +31,10 @@ class OllamaError(RuntimeError):
 
 
 class Ollama:
-    def __init__(self, url="http://127.0.0.1:11434", model="gemma4:e4b", timeout=900):
+    def __init__(self, url="http://127.0.0.1:11434", model="gemma4:e4b", timeout=900, judge_model=None):
+        """``model`` sucht Tippfehler, ``judge_model`` (Standard: dasselbe) gibt die Zweitmeinung mit Thinking."""
         self.url, self.model, self.timeout = url.rstrip("/"), model, timeout
+        self.judge_model = judge_model or model
 
     def _post(self, path, payload):
         request = urllib.request.Request(
@@ -44,14 +46,15 @@ class Ollama:
         except (urllib.error.URLError, TimeoutError, ConnectionError, json.JSONDecodeError) as e:
             raise OllamaError(f"Ollama ({self.url}) nicht nutzbar: {e}") from e
 
-    def available(self):
-        """True, wenn der Server antwortet und das Modell geladen werden kann."""
+    def available(self, model=None):
+        """True, wenn der Server antwortet und das Modell (Standard: ``self.model``) geladen werden kann."""
+        model = model or self.model
         try:
             with urllib.request.urlopen(self.url + "/api/tags", timeout=10) as response:
                 names = {m["name"] for m in json.load(response)["models"]}
         except (urllib.error.URLError, TimeoutError, ConnectionError, ValueError, KeyError):
             return False
-        return self.model in names or f"{self.model}:latest" in names
+        return model in names or f"{model}:latest" in names
 
     def typos(self, system, texts):
         """Gemeldete Tippfehler als ``[{"id": 1-basiert, "wort", "korrekt"}]``; nur Korrekturen, nie ganze Texte."""
@@ -86,7 +89,7 @@ class Ollama:
         reply = self._post(
             "/api/chat",
             {
-                "model": self.model,
+                "model": self.judge_model,
                 "stream": False,
                 "think": True,
                 "format": JUDGE_SCHEMA,

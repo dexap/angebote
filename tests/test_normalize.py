@@ -452,3 +452,28 @@ def test_from_args_wires_dictionary_path_and_switch(tmp_path):
     on = normalize.from_args(parser.parse_args(common + ["--corrections", str(tmp_path / "w.json")]))
     assert on.corrections is not None and on.corrections.path == tmp_path / "w.json"
     assert normalize.from_args(parser.parse_args(common + ["--no-corrections"])).corrections is None
+
+
+def test_judge_uses_its_own_model_and_typos_the_main_model(monkeypatch):
+    models = []
+
+    def fake_post(self, path, payload):
+        models.append(payload["model"])
+        content = {"wahl": "a", "grund": "x"} if payload.get("think") else {"fixes": []}
+        return {"message": {"content": json.dumps(content)}}
+
+    monkeypatch.setattr(Ollama, "_post", fake_post)
+    llm = Ollama(model="gross", judge_model="klein")
+    llm.typos("prompt", ["text"])
+    assert llm.judge("prompt", {"a": "x", "b": "y"}) == "a"
+    assert models == ["gross", "klein"]
+    assert Ollama(model="gross").judge_model == "gross"
+
+
+def test_from_args_falls_back_to_main_model_when_judge_model_is_missing(monkeypatch, tmp_path, capsys):
+    monkeypatch.setattr(Ollama, "available", lambda self, model=None: (model or self.model) != "fehlt")
+    parser = argparse.ArgumentParser()
+    normalize.add_arguments(parser)
+    args = parser.parse_args(["--model", "gross", "--judge-model", "fehlt", "--cache", str(tmp_path / "c.json")])
+    llm = normalize.from_args(args).llm
+    assert llm.judge_model == "gross" and "Zweitmeinungs-Modell fehlt fehlt" in capsys.readouterr().err
