@@ -7,6 +7,7 @@ import pytest
 
 from lidl_angebote import check, normalize, site
 from lidl_angebote.normalize import rules
+from lidl_angebote.normalize.corrections import Corrections
 from lidl_angebote.normalize.llm import Ollama, OllamaError
 from lidl_angebote.normalize.pipeline import BATCH_SIZE, Normalizer, validate
 
@@ -392,3 +393,62 @@ def test_site_build_with_transform_stays_schema_valid(tmp_path, fake_fetch):
     assert offers and check.check_offers(offers) == []
     assert llm.calls
     assert all("\n" not in o.get("description", "") for o in offers)
+
+
+# --- Wörterbuch ------------------------------------------------------------------------------------------
+
+
+def test_dictionary_applies_without_any_model(tmp_path):
+    book = Corrections(tmp_path / "c.json")
+    book.learn("Standartpackung", "Standardpackung")
+    normalizer = Normalizer(corrections=book)
+    out = normalizer.offers([{"id": "1", "name": "Tee", "description": "Standartpackung: 500 ml", "price": 1.0}])
+    assert out[0]["description"] == "Standardpackung: 500 ml" and normalizer.stats["dictionary"] == 1
+
+
+def test_confirmed_fix_is_learned_and_then_applied_without_the_model(tmp_path):
+    book = Corrections(tmp_path / "c.json")
+    Normalizer(llm=FakeLLM(FIX), corrections=book).offers(OFFERS)
+    assert book.apply("Kartofeln") == "Kartoffeln"
+    later = FakeLLM()  # das Modell meldet nichts mehr, das Wörterbuch kennt den Fehler
+    normalizer = Normalizer(llm=later, corrections=Corrections(tmp_path / "c.json"))
+    out = normalizer.offers([{"id": "9", "name": "Kartofeln mit Butter", "price": 1.0}])
+    assert out[0]["name"] == "Kartoffeln mit Butter" and normalizer.stats["dictionary"] == 1
+
+
+def test_judge_approved_fix_is_learned_with_the_word_pair(tmp_path):
+    book = Corrections(tmp_path / "c.json")
+    llm = FakeLLM(TWO_EDITS, choose=takes_change)
+    Normalizer(llm=llm, judge_budget=60, corrections=book).offers(JOFFERS)
+    assert book.apply("Mozarela pur") == "Mozzarella pur"
+
+
+def test_rejected_or_overruled_fixes_are_never_learned(tmp_path):
+    book = Corrections(tmp_path / "c.json")
+    Normalizer(llm=FakeLLM(TWO_EDITS, choose=keeps_original), judge_budget=60, corrections=book).offers(JOFFERS)
+    Normalizer(llm=FakeLLM({"Kartofeln": "Pommesfritten"}), corrections=book).offers(OFFERS)  # validate lehnt ab
+    Normalizer(llm=FakeLLM(TWO_EDITS), corrections=book).offers(JOFFERS)  # ohne Zweitmeinung abgelehnt
+    assert len(book) == 0
+
+
+def test_fix_that_does_not_match_a_whole_word_is_not_learned(tmp_path):
+    book = Corrections(tmp_path / "c.json")
+    offers = [{"id": "1", "name": "Kartofelnsalat", "price": 1.0}, {"id": "2", "name": "Kartoffeln", "price": 1.0}]
+    Normalizer(llm=FakeLLM({"Kartofeln": "Kartoffeln"}), corrections=book).offers(offers)
+    assert len(book) == 0
+
+
+def test_dictionary_leaves_brand_and_notes_alone(tmp_path):
+    book = Corrections(tmp_path / "c.json")
+    book.learn("Kartofeln", "Kartoffeln")
+    out = Normalizer(corrections=book).offers([{"id": "1", "name": "Tee", "brand": "Kartofeln", "notes": ["Kartofeln"], "price": 1.0}])
+    assert out[0]["brand"] == "Kartofeln" and out[0]["notes"] == ["Kartofeln"]
+
+
+def test_from_args_wires_dictionary_path_and_switch(tmp_path):
+    parser = argparse.ArgumentParser()
+    normalize.add_arguments(parser)
+    common = ["--no-llm", "--cache", str(tmp_path / "cache.json")]
+    on = normalize.from_args(parser.parse_args(common + ["--corrections", str(tmp_path / "w.json")]))
+    assert on.corrections is not None and on.corrections.path == tmp_path / "w.json"
+    assert normalize.from_args(parser.parse_args(common + ["--no-corrections"])).corrections is None

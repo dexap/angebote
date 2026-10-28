@@ -15,6 +15,7 @@ import time
 from pathlib import Path
 
 from . import rules
+from .corrections import Corrections, default_path
 from .llm import Ollama, OllamaError
 from .locales import DEFAULT, LOCALES, get_locale
 
@@ -137,16 +138,21 @@ def _apply(text, fixes, abbreviations=frozenset()):
     return text if changed else None
 
 
+def _applied(text, fixes, abbreviations=frozenset()):
+    """Die Korrekturen, die auf ein ganzes Wort des Textes passen (nur diese werden gelernt)."""
+    return [f for f in fixes if _usable(f, abbreviations) and _apply(text, [f], abbreviations) is not None]
+
+
 class Normalizer:
-    def __init__(self, locale=DEFAULT, llm=None, cache_path=None, log=None, judge_budget=0):
-        """``judge_budget``: Sekunden je Lauf für die Zweitmeinung (0 = aus)."""
-        self.locale, self.llm = locale, llm
+    def __init__(self, locale=DEFAULT, llm=None, cache_path=None, log=None, judge_budget=0, corrections=None):
+        """``judge_budget``: Sekunden je Lauf für die Zweitmeinung (0 = aus); ``corrections``: Wörterbuch (``Corrections``)."""
+        self.locale, self.llm, self.corrections = locale, llm, corrections
         self.cache_path = Path(cache_path) if cache_path else None
         self.log = log or (lambda message: None)
         self.prompt, self.judge_prompt = locale.prompt, locale.judge_prompt
         self.judge_budget, self._judge_spent = judge_budget, 0.0
         self.stats = dict.fromkeys(
-            ("texts", "skipped", "asked", "fixed", "rejected", "judged", "judge_took_change", "pending", "rules_only"), 0
+            ("texts", "dictionary", "skipped", "asked", "fixed", "rejected", "judged", "judge_took_change", "pending", "rules_only"), 0
         )
         self._cache = self._load()
         prompts = hashlib.sha1((self.prompt + self.judge_prompt).encode()).hexdigest()
@@ -182,6 +188,16 @@ class Normalizer:
         """Kommen die korrigierten Wörter schon in anderen Texten vor? Sonst fehlt der Beleg für die Korrektur."""
         return all(p in self._vocab for f in fixes for p in _parts(f["korrekt"]))
 
+    def _remember(self, fixes):
+        """Bestätigte Korrekturen ins Wörterbuch aufnehmen (wirkt ab dem nächsten Text)."""
+        for fix in fixes:
+            if self.corrections is not None and self.corrections.learn(fix["wort"], fix["korrekt"]):
+                self.log(f"Wörterbuch lernt: {fix['wort']!r} -> {fix['korrekt']!r}")
+
+    def _pending_fixes(self, text):
+        value = self._cache.get(self._key(text))
+        return value.get("fixes", []) if isinstance(value, dict) else []
+
     def _known(self, part):
         return self._cache.get(self._key("wort|" + part)) == 1
 
@@ -215,9 +231,11 @@ class Normalizer:
                     self._cache[self._key(text)] = text
                 elif validate(text, candidate) and self._confirmed(own):
                     self._cache[self._key(text)] = candidate
+                    self._remember(_applied(text, own, self.locale.abbreviations))
                     self.stats["fixed"] += 1
                 elif self.judge_budget and hard_ok(text, candidate):
-                    self._cache[self._key(text)] = {"pending": candidate}
+                    applied = _applied(text, own, self.locale.abbreviations)
+                    self._cache[self._key(text)] = {"pending": candidate, "fixes": [[f["wort"], f["korrekt"]] for f in applied]}
                 else:
                     self._cache[self._key(text)] = text
                     self.stats["rejected"] += 1
@@ -237,6 +255,8 @@ class Normalizer:
         finally:
             self._judge_spent += time.monotonic() - started
         picked = {"a": a, "b": b}.get(choice, text)  # keine verwertbare Antwort: Original behalten
+        if picked == change:
+            self._remember({"wort": w, "korrekt": k} for w, k in self._pending_fixes(text))
         self._cache[self._key(text)] = picked
         self.stats["judged"] += 1
         self.stats["judge_took_change"] += picked == change
@@ -267,9 +287,20 @@ class Normalizer:
         self.stats["rules_only"] += sum(1 for t in texts if self._final(t) is None and self._unknown_parts(t))
         return {t: self._final(t) or t for t in texts}
 
+    def _translate(self, offer):
+        """Wörterbuch auf ``name`` und ``description`` anwenden, vor Cache und Modell."""
+        if not self.corrections:
+            return offer
+        out = dict(offer)
+        for field in MODEL_FIELDS:
+            if field in out:
+                out[field] = self.corrections.apply(out[field])
+        self.stats["dictionary"] += out != offer
+        return out
+
     def offers(self, offers):
         """Normalisierte Kopie der Angebote (Eingabe bleibt unverändert)."""
-        cleaned = [rules.clean_offer_texts(o, self.locale) for o in offers]
+        cleaned = [self._translate(rules.clean_offer_texts(o, self.locale)) for o in offers]
         context = {}  # Text -> (Feld, vollständiges Angebot) als Beleg für die Zweitmeinung
         for offer in cleaned:
             for field in MODEL_FIELDS:
@@ -284,8 +315,8 @@ class Normalizer:
         return [dict(o, **{f: mapping[o[f]] for f in MODEL_FIELDS if f in o}) for o in cleaned]
 
 
-def normalize_offers(offers, locale=DEFAULT, llm=None, cache_path=None, judge_budget=0):
-    return Normalizer(locale, llm, cache_path, judge_budget=judge_budget).offers(offers)
+def normalize_offers(offers, locale=DEFAULT, llm=None, cache_path=None, judge_budget=0, corrections=None):
+    return Normalizer(locale, llm, cache_path, judge_budget=judge_budget, corrections=corrections).offers(offers)
 
 
 # --- Kommandozeile ------------------------------------------------------------------------------
@@ -302,6 +333,8 @@ def add_arguments(parser):
         "--judge-minutes", type=float, default=float(os.environ.get("ANGEBOTE_JUDGE_MINUTES", JUDGE_MINUTES)),
         help=f"Zeitbudget je Lauf für Zweitmeinungen in Minuten (Standard: {JUDGE_MINUTES}); Rest folgt im nächsten Lauf",
     )
+    group.add_argument("--corrections", type=Path, help=f"Wörterbuch-Datei (Standard: {default_path()})")
+    group.add_argument("--no-corrections", action="store_true", help="Wörterbuch weder anwenden noch lernen")
     group.add_argument("--cache", type=Path, default=DEFAULT_CACHE, help=f"Cache-Datei (Standard: {DEFAULT_CACHE})")
 
 
@@ -318,7 +351,8 @@ def from_args(args):
             _log(f"Warnung: Ollama-Modell {args.model} unter {args.ollama_url} nicht erreichbar; nur Regeln")
             llm = None
     budget = 0 if args.no_judge else args.judge_minutes * 60
-    return Normalizer(get_locale(args.lang), llm, args.cache, log=_log, judge_budget=budget)
+    corrections = None if args.no_corrections else Corrections(args.corrections or default_path(args.lang), log=_log)
+    return Normalizer(get_locale(args.lang), llm, args.cache, log=_log, judge_budget=budget, corrections=corrections)
 
 
 def main(argv=None):
