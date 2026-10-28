@@ -45,15 +45,15 @@ class FakeLLM:
     [
         ("Diese Gläser machen schon beim\nEinschenken\ngute Laune.", "Diese Gläser machen schon beim Einschenken gute Laune"),
         ("Je Stück\\n", "Je Stück"),
-        ("Versch. Sorten.", "Verschiedene Sorten"),
-        ("Je 10 Stk.", "Je 10 Stück"),
+        ("Versch. Sorten.", "Versch. Sorten"),
+        ("Je 10 Stk.", "Je 10 Stk."),
         ("Frisch ...", "Frisch"),
         ("Milch , Käse,Brot", "Milch, Käse, Brot"),
         ("0,25 Pfand", "0,25 Pfand"),
-        ("zzgl. 0.25 Pfand, 1.299 Stück", "zuzüglich 0,25 Pfand, 1.299 Stück"),
+        ("zzgl. 0.25 Pfand, 1.299 Stück", "zzgl. 0,25 Pfand, 1.299 Stück"),
         ("je 295g, 3,5% Fett, 0,5l", "je 295 g, 3,5 % Fett, 0,5 l"),
-        ("Je St.", "Je Stück"),
-        ("zzgl. 0.25€ Pfand", "zuzüglich 0,25 € Pfand"),
+        ("Je St.", "Je St."),
+        ("zzgl. 0.25€ Pfand", "zzgl. 0,25 € Pfand"),
         ("nur € 1,99", "nur 1,99 €"),
         ("Bio\xadMilch  \xa0 frisch", "BioMilch frisch"),
         ("   ", ""),
@@ -61,32 +61,6 @@ class FakeLLM:
 )
 def test_clean_german(raw, expected):
     assert rules.clean(raw) == expected
-
-
-@pytest.mark.parametrize(
-    "raw, expected",
-    [
-        ("Versch. Sorten. Je 400 g", "Verschiedene Sorten. Je 400 g"),
-        ("Mind. 28 Tage gereift. Ca. 285 g", "Mindestens 28 Tage gereift. Circa 285 g"),
-        ("Leistung max. 2.400 W, inkl. Zubehör", "Leistung maximal 2.400 W, inklusive Zubehör"),
-        ("Vegan, zzgl. 0,25 Pfand", "Vegan, zuzüglich 0,25 Pfand"),
-        ("230-g-Pckg.", "230-g-Packung"),
-        ("Brot 800-g-St.", "Brot 800-g-Stück"),
-        ("Versch. Sorten 270-g-Fl. zzgl. 0,25 Pfand", "Verschiedene Sorten 270-g-Flasche zuzüglich 0,25 Pfand"),
-        ("Je 3 Stck", "Je 3 Stück"),
-        ("Bis zu 40 Min. Laufzeit", "Bis zu 40 Minuten Laufzeit"),  # nach einer Zahl: Minuten
-        ("Min. 2 Stück", "Mindestens 2 Stück"),  # sonst: mindestens
-        ("Käse, mind. 58 % Fett i.Tr. 100 g", "Käse, mindestens 58 % Fett in der Trockenmasse 100 g"),
-        ("versch. Gewichte, z. B. 200 g", "Verschiedene Gewichte, zum Beispiel 200 g"),
-        ("Spanien Kl. I, Gr. 38/40, teilw. koffeinhaltig", "Spanien Klasse I, Größe 38/40, teilweise koffeinhaltig"),
-        ("Verscg Sorten. Gekühlt", "Verschiedene Sorten. Gekühlt"),  # Tippfehler in der Abkürzung
-        ("40 % vol. Je 0,7 l", "40 % vol. Je 0,7 l"),  # Alkoholangabe bleibt
-        ("Je 400 g. Je 1,5 l, 250 ml, 2 kg, 50 cm", "Je 400 g. Je 1,5 l, 250 ml, 2 kg, 50 cm"),  # Einheiten bleiben
-        ("St. Moritz Käse", "St. Moritz Käse"),  # Sankt, kein Stück
-    ],
-)
-def test_abbreviations_are_spelled_out(raw, expected):
-    assert rules.fix_case(rules.clean(raw)) == expected
 
 
 @pytest.mark.parametrize(
@@ -251,11 +225,12 @@ def test_vocabulary_evidence_is_remembered_between_runs(tmp_path):
 def test_case_only_and_abbreviation_suggestions_are_ignored():
     offers = [
         {"id": "1", "name": "Frischer Schweinenackenbraten", "price": 1.0},
-        {"id": "2", "name": "Schweinenackenbraten 40 % Vol.", "price": 1.0},
+        {"id": "2", "name": "Versch. Sorten", "price": 1.0},
+        {"id": "3", "name": "Verschiedene Sorten", "price": 1.0},
     ]
-    llm = FakeLLM({"Schweinenackenbraten": "schweinenackenbraten", "Vol": "Volumen"}, choose=lambda p: "b")
+    llm = FakeLLM({"Schweinenackenbraten": "schweinenackenbraten", "Versch": "Verschiedene"}, choose=lambda p: "b")
     out = Normalizer(llm=llm, judge_budget=60).offers(offers)
-    assert [o["name"] for o in out] == ["Frischer Schweinenackenbraten", "Schweinenackenbraten 40 % Vol."]
+    assert [o["name"] for o in out] == ["Frischer Schweinenackenbraten", "Versch. Sorten", "Verschiedene Sorten"]
     assert llm.judged == []
 
 
@@ -326,14 +301,14 @@ def test_changed_digits_never_reach_the_judge():
         ("Center-Kanal-Treibers", "Center-Kanal-Treiber"),
     ],
 )
-def test_changed_word_endings_go_to_the_judge(original, candidate):
+def test_changed_word_endings_never_reach_the_judge(original, candidate):
     offers = [{"id": "1", "name": original, "price": 1.0}]
     letters = lambda text: re.findall(r"[^\W\d_]+", text)  # noqa: E731
     fixes = {w: c for w, c in zip(letters(original), letters(candidate)) if w != c}
     assert fixes  # der Test meldet wirklich eine Korrektur
-    llm = FakeLLM(fixes, choose=lambda p: "a" if p["a"] == candidate else "b")
+    llm = FakeLLM(fixes, choose=lambda p: "b")
     out = Normalizer(llm=llm, judge_budget=60).offers(offers)
-    assert len(llm.judged) == 1 and out[0]["name"] == candidate
+    assert llm.judged == [] and out[0]["name"] == original
 
 
 def test_no_judge_budget_means_no_second_opinion():

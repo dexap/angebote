@@ -17,14 +17,13 @@ from pathlib import Path
 from . import rules
 from .llm import Ollama, OllamaError
 from .locales import DEFAULT, LOCALES, get_locale
-from .rules import edit_distance
 
 PUNCTUATION = ".,;:!?"
 BATCH_SIZE = 16
 MIN_TYPO_LENGTH = 6  # kürzere Wörter ändert nur eine Zweitmeinung, nie die Prüfung allein
 MODEL_FIELDS = ("name", "description")  # ``brand`` (Eigenname) und ``notes`` (feste Formeln) nur per Regeln
 JUDGE_MINUTES = 30  # Zeitbudget je Lauf für Zweitmeinungen (Thinking ist auf der CPU langsam)
-LOGIC_VERSION = 4  # erhöhen, wenn sich die Entscheidungslogik ändert: entwertet gespeicherte Ergebnisse
+LOGIC_VERSION = 3  # erhöhen, wenn sich die Entscheidungslogik ändert: entwertet gespeicherte Ergebnisse
 DEFAULT_MODEL = "gemma4:e4b"
 DEFAULT_CACHE = Path(os.environ.get("ANGEBOTE_CACHE") or Path.home() / ".cache" / "angebote" / "normalize.json")
 _LETTERS = re.compile(r"[^\W\d_]+")
@@ -42,6 +41,21 @@ def _tail(word):
     return word[len(word.rstrip(PUNCTUATION)) :]
 
 
+def _osa(a, b):
+    """Edit-Distanz (Einfügen, Löschen, Ersetzen, Vertauschen zweier Nachbarn = je 1)."""
+    d = [[0] * (len(b) + 1) for _ in range(len(a) + 1)]
+    for i in range(len(a) + 1):
+        d[i][0] = i
+    for j in range(len(b) + 1):
+        d[0][j] = j
+    for i in range(1, len(a) + 1):
+        for j in range(1, len(b) + 1):
+            d[i][j] = min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] != b[j - 1]))
+            if i > 1 and j > 1 and a[i - 1] == b[j - 2] and a[i - 2] == b[j - 1]:
+                d[i][j] = min(d[i][j], d[i - 2][j - 2] + 1)
+    return d[-1][-1]
+
+
 def _is_typo_fix(old, new):
     """Ein Tippfehler: langes Wort, genau eine Änderung, gleicher Anfang und gleiche Endung (keine Beugung)."""
     a, b = old.lower(), new.lower()
@@ -51,7 +65,7 @@ def _is_typo_fix(old, new):
         and a[0] == b[0]
         and a[-2:] == b[-2:]
         and old.count("-") == new.count("-")
-        and edit_distance(a, b) == 1
+        and _osa(a, b) == 1
     )
 
 
@@ -68,11 +82,20 @@ def _word_ok(old, new):
     return _is_typo_fix(old, new)
 
 
+def _inflected(original, candidate):
+    """Ändert sich bei gleicher Wortzahl die Endung eines Wortes (Beugung: Wurzel -> Wurzeln)? Das beurteilt das Modell unzuverlässig."""
+    old, new = original.split(), candidate.split()
+    return len(old) == len(new) and any(
+        _core(a) != _core(b) and _core(a).lower() != _core(b).lower() and _core(a)[-2:].lower() != _core(b)[-2:].lower()
+        for a, b in zip(old, new)
+    )
+
+
 def hard_ok(original, candidate):
-    """Untergrenze, die auch die Zweitmeinung nicht kippt: keine Umbrüche/Escapes, Ziffern unverändert."""
+    """Untergrenze, die auch die Zweitmeinung nicht kippt: keine Umbrüche/Escapes, Ziffern und Wortendungen unverändert."""
     if not candidate.strip() or "\n" in candidate or "\\" in candidate:
         return False
-    return _digits(original) == _digits(candidate)
+    return _digits(original) == _digits(candidate) and not _inflected(original, candidate)
 
 
 def validate(original, candidate):
