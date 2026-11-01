@@ -35,8 +35,6 @@ jobs:
     timeout-minutes: 180
     permissions:
       contents: write # NBA-Verlauf in den Branch nba-data schreiben
-    env:
-      NBA_DATA: ${{ runner.temp }}/nba-data
     steps:
       - uses: actions/checkout@v7
       # NBA-Verletzungs-Report (nba/build.py): täglich frische Daten von ESPN; Verlauf und letzter
@@ -45,6 +43,7 @@ jobs:
       - name: NBA-Daten aktualisieren
         continue-on-error: true
         run: |
+          NBA_DATA="$RUNNER_TEMP/nba-data"
           git worktree prune
           rm -rf "$NBA_DATA"
           if git ls-remote --exit-code --heads origin nba-data >/dev/null; then
@@ -65,6 +64,7 @@ jobs:
       - run: python3 -m lidl_angebote.site --out _site --normalize
       - name: NBA-Seite bauen
         run: |
+          NBA_DATA="$RUNNER_TEMP/nba-data"
           if [ -f "$NBA_DATA/data.json" ]; then src="$NBA_DATA"; else src=nba; fi
           python3 nba/build.py site --data-dir "$src" --out _site/nba
       - uses: actions/upload-pages-artifact@v5
