@@ -34,7 +34,12 @@ Einmalig nötig: *Settings → Pages → Build and deployment → Source: GitHub
 
 Lokal bauen: `python3 -m lidl_angebote.site --out _site`
 
-**NBA-Verletzungs-Report:** `https://dexap.github.io/angebote/nba/` – alle NBA-Kader nach Gehalt 2026-27, Verletzte ausgegraut (Snapshot vom 1.11.2026). Daten neu ziehen: `python3 nba/build.py` (schreibt `nba/data.json`).
+**NBA-Verletzungs-Report:** `https://dexap.github.io/angebote/nba/` – alle NBA-Kader nach Gehalt 2026-27, Verletzte ausgegraut. Der Pages-Workflow zieht die Daten täglich von ESPN (Kader, Verträge, Injury Report, Tabelle, Meldungen) und schreibt den Verlauf in den Branch `nba-data` (`data.json`, `history.json`) – ESPN selbst liefert keine Verletzungshistorie. Fällt der Abruf aus, wird der letzte Stand deployt.
+
+```bash
+python3 nba/build.py update --data-dir DIR   # Quellen abrufen, DIR/data.json + DIR/history.json fortschreiben
+python3 nba/build.py site --data-dir DIR --out _site/nba   # Seite bauen (offline)
+```
 
 Neue Händler: siehe [SCHEMA.md](SCHEMA.md) (Abschnitt „Neuer Händler“).
 
