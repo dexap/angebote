@@ -34,6 +34,8 @@ Einmalig nötig: *Settings → Pages → Build and deployment → Source: GitHub
 
 Lokal bauen: `python3 -m lidl_angebote.site --out _site`
 
+**NBA-Verletzungs-Report:** `https://dexap.github.io/angebote/nba/` – alle NBA-Kader nach Gehalt 2026-27, Verletzte ausgegraut (Snapshot vom 1.11.2026). Daten neu ziehen: `python3 nba/build.py` (schreibt `nba/data.json`).
+
 Neue Händler: siehe [SCHEMA.md](SCHEMA.md) (Abschnitt „Neuer Händler“).
 
 ### Normalisierung
