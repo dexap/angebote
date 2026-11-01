@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NBA Verletzungs-Report 2026-27</title>
-<meta name="description" content="Alle 30 NBA-Teams und ihre Spieler nach Gehalt 2026-27 – verletzte Spieler ausgegraut. Stand: 1. November 2026.">
+<meta name="description" content="__OG_DESCRIPTION__">
 <meta property="og:type" content="website">
 <meta property="og:title" content="NBA Verletzungs-Report 2026-27 – Wer fehlt, und was kostet es?">
-<meta property="og:description" content="81 verletzte Spieler, 1,02 Mrd. $ Gehalt auf der Verletztenliste – nach nur ~6 Spielen pro Team. Alle Teams, alle Gehälter.">
+<meta property="og:description" content="__OG_DESCRIPTION__">
 <meta property="og:image" content="https://dexap.github.io/angebote/nba/og.png">
 <meta property="og:url" content="https://dexap.github.io/angebote/nba/">
 <meta name="twitter:card" content="summary_large_image">
@@ -77,7 +77,7 @@ header.hero::after { content: ""; position: absolute; right: -120px; top: -120px
 .meta { margin-top: 14px; font-size: 12.5px; color: #a9b8d3; }
 
 /* KPI */
-.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: -1px; padding: 18px 0 0; }
+.kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: -1px; padding: 18px 0 0; }
 .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow); }
 .kpi .lbl { font-size: 12.5px; color: var(--text-2); font-weight: 600; }
 .kpi .val { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 40px; line-height: 1.05; margin: 6px 0 2px; }
@@ -102,6 +102,27 @@ section { margin: 28px 0; }
 .context li { margin: 4px 0; }
 blockquote { margin: 0 0 12px; padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--surface-2); border-radius: 0 8px 8px 0; font-size: 14px; }
 blockquote cite { display: block; margin-top: 4px; font-style: normal; font-size: 12.5px; color: var(--text-3); }
+.quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+.quotes blockquote { margin: 0; }
+.toplist { list-style: none; padding: 0 !important; margin: 0; }
+.toplist li { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 8px 0; border-bottom: 1px solid var(--line); margin: 0 !important; }
+.toplist li:last-child { border-bottom: 0; }
+.toplist .n { font-weight: 600; }
+.toplist .d { grid-column: 1 / -1; font-size: 12.5px; color: var(--text-2); }
+.toplist .s { font-weight: 600; text-align: right; white-space: nowrap; }
+.news a { display: block; padding: 9px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.news a:last-child { border-bottom: 0; }
+.news a:hover .h { text-decoration: underline; }
+.news .h { font-weight: 600; font-size: 14px; }
+.news .t { font-size: 12px; color: var(--text-3); }
+.pill.fit { background: transparent; color: var(--fit); border: 1px solid color-mix(in srgb, var(--fit) 45%, transparent); }
+.trend svg { display: block; width: 100%; height: auto; overflow: visible; }
+.trend .ax { font: 11px Inter, sans-serif; fill: var(--text-3); }
+.trend .grid { stroke: var(--line); stroke-width: 1; }
+.trend .ln { fill: none; stroke: var(--inj); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.trend .pt { fill: var(--inj); stroke: var(--surface); stroke-width: 2; }
+.trend .hit { fill: transparent; }
+.trend .lbl { font: 600 12px Inter, sans-serif; fill: var(--text); }
 .src { font-size: 12.5px; color: var(--text-3); margin-top: 10px; }
 
 /* Charts */
@@ -179,6 +200,7 @@ footer ul { padding-left: 18px; margin: 6px 0; }
 
 @media (max-width: 960px) {
   .kpis { grid-template-columns: repeat(2, 1fr); }
+  .quotes { grid-template-columns: 1fr; }
   .context, .charts, footer .cols { grid-template-columns: 1fr; }
 }
 @media (max-width: 520px) {
@@ -198,9 +220,9 @@ footer ul { padding-left: 18px; margin: 6px 0; }
 <header class="hero">
   <div class="wrap">
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Farbschema wechseln">Hell / Dunkel</button>
-    <div class="kicker"><span class="dot"></span>Saison 2026-27 · Stand <span id="asof">1. November 2026</span></div>
+    <div class="kicker"><span class="dot"></span>Saison 2026-27 · Stand <span id="asof">…</span></div>
     <h1>NBA Verletzungs-<span>Report</span></h1>
-    <p class="lead">Nach nur rund sechs Spielen pro Team fehlt schon ein Großteil der Stars. Hier: alle 30 Teams, jeder Spieler nach Jahresgehalt sortiert. <strong>Verletzte Spieler sind ausgegraut.</strong></p>
+    <p class="lead">Nach nur <span id="gamesLead">wenigen</span> Spielen pro Team fehlt schon ein Großteil der Stars. Hier: alle 30 Teams, jeder Spieler nach Jahresgehalt sortiert. <strong>Verletzte Spieler sind ausgegraut.</strong></p>
     <button class="share-btn" id="shareBtn" type="button">↗ Seite teilen</button>
     <div class="meta" id="meta">Daten: ESPN Injury Report &amp; Kader-/Vertragsdaten</div>
   </div>
@@ -210,36 +232,33 @@ footer ul { padding-left: 18px; margin: 6px 0; }
   <div class="kpis" id="kpis"></div>
 
   <section>
-    <div class="sec-head"><div><h2>Die Lage</h2><p>Was die Liga gerade beschäftigt</p></div></div>
+    <div class="sec-head"><div><h2>Die Lage</h2><p>Täglich automatisch aktualisiert</p></div></div>
     <div class="context">
       <div class="card pad">
-        <h3>Die prominentesten Ausfälle</h3>
-        <ul>
-          <li><b>Jalen Williams</b> (OKC) – Wadenbeinbruch + ausgerenkter Knöchel (25.10.), Operation; erst kurz vor Saisonende Neubewertung</li>
-          <li><b>Chet Holmgren</b> (OKC) – kleiner Riss der Patellasehne, ca. 8–10 Wochen</li>
-          <li><b>Cason Wallace</b> (OKC) – Labrum-Riss, Großteil der Saison</li>
-          <li><b>Anthony Edwards</b> (MIN) – Arthroskopie am rechten Knie (28.10.), bis zu zwei Monate</li>
-          <li><b>Jaren Jackson Jr.</b> (UTA) – Innenbandriss (MCL), mind. 6 Wochen</li>
-          <li><b>Paolo Banchero</b> (ORL) – hohe Knöchelverstauchung, 4–6 Wochen</li>
-          <li><b>Ja Morant</b> (POR) – Oberschenkelzerrung Grad 2, mind. 4 Wochen</li>
-          <li><b>Kawhi Leonard</b> (TOR) – Schwellung im Knie, mehrere Wochen</li>
-          <li><b>Tyrese Haliburton</b> (IND), <b>Jalen Duren</b> (DET) – Oberschenkelzerrungen, mind. 2 Wochen</li>
-          <li><b>Ben Simmons</b> (SAC) – Achillessehnenriss vor dem Saisonstart, Saison-Aus</li>
-        </ul>
-        <div class="src">Quellen: <a href="https://www.cbssports.com/nba/news/nba-unprecedented-early-season-injury-crisis-players-coaches-answers/" target="_blank" rel="noopener">CBS Sports, 30.10.2026</a> · <a href="https://sports.yahoo.com/articles/were-few-games-nba-season-000733782.html" target="_blank" rel="noopener">Yahoo Sports, 29.10.2026</a> · <a href="https://www.complex.com/bets/a/jose-martinez/nba-early-season-injury-list" target="_blank" rel="noopener">Complex</a></div>
+        <h3>Die teuersten Ausfälle</h3>
+        <ul class="toplist" id="topOut"></ul>
+        <div class="src">Automatisch aus dem aktuellen Injury Report · Notizen via ESPN/RotoWire</div>
       </div>
-      <div class="card pad">
-        <h3>Stimmen</h3>
-        <blockquote>„Unprecedented“ – so früh in einer Saison habe er so etwas noch nicht erlebt.<cite>Ime Udoka, Head Coach Houston Rockets</cite></blockquote>
-        <blockquote>„I wish I knew the science behind why all of these injuries are happening.“<cite>Kevin Durant – vermutet schnelleres Spiel, mehr Ballbesitze, 82 Spiele</cite></blockquote>
-        <blockquote>„There's no prevention.“ Er fordert mehr Forschung der Liga zur Spielergesundheit.<cite>Fred VanVleet, NBPA-Präsident (selbst gerade verletzt)</cite></blockquote>
-        <div class="src">Am 28.10. standen laut Yahoo Sports 108 Spieler auf dem offiziellen NBA-Injury-Report, 84 davon wegen Verletzung oder Krankheit.</div>
+      <div class="card pad news">
+        <h3>Aktuelle Meldungen</h3>
+        <div id="news"></div>
+        <div class="src">Automatisch gefilterte ESPN-Meldungen zu Verletzungen</div>
       </div>
+    </div>
+    <div class="quotes">
+      <blockquote>„Unprecedented“ – so früh in einer Saison habe er so etwas noch nicht erlebt.<cite>Ime Udoka, Head Coach Houston Rockets · <a href="https://www.cbssports.com/nba/news/nba-unprecedented-early-season-injury-crisis-players-coaches-answers/" target="_blank" rel="noopener">CBS Sports, 30.10.2026</a></cite></blockquote>
+      <blockquote>„I wish I knew the science behind why all of these injuries are happening.“<cite>Kevin Durant – vermutet schnelleres Spiel, mehr Ballbesitze, 82 Spiele · <a href="https://www.cbssports.com/nba/news/nba-unprecedented-early-season-injury-crisis-players-coaches-answers/" target="_blank" rel="noopener">CBS Sports</a></cite></blockquote>
+      <blockquote>„There's no prevention.“ Er fordert mehr Forschung der Liga zur Spielergesundheit.<cite>Fred VanVleet, NBPA-Präsident · <a href="https://www.cbssports.com/nba/news/nba-unprecedented-early-season-injury-crisis-players-coaches-answers/" target="_blank" rel="noopener">CBS Sports</a></cite></blockquote>
     </div>
   </section>
 
   <section>
     <div class="sec-head"><div><h2>Kennzahlen</h2><p>Gehalt = Jahresgehalt 2026-27 laut Vertragsdaten</p></div></div>
+    <div class="card pad chart trend" style="margin-bottom:12px">
+      <h3>Verlauf: verletzte Spieler pro Tag</h3>
+      <p class="hint" id="trendHint">Tägliche Erfassung aus dem Injury Report</p>
+      <div id="trendChart"></div>
+    </div>
     <div class="charts">
       <div class="card pad chart">
         <h3>Gehalt auf der Verletztenliste je Team</h3>
@@ -289,7 +308,7 @@ footer ul { padding-left: 18px; margin: 6px 0; }
       <h3>Methodik</h3>
       <ul>
         <li><b>Ausgegraut</b> = Spieler steht wegen einer <b>Verletzung</b> auf dem aktuellen Injury Report (Status „Out“ oder „Day-To-Day“). Abwesenheiten wegen Pause (Rest), Krankheit oder persönlicher Gründe werden markiert, aber nicht ausgegraut und nicht als verletzt gezählt.</li>
-        <li>Erfasst ist, wer <b>aktuell</b> ausfällt. Spieler, die sich seit Saisonstart verletzt hatten und bereits zurück sind, erscheinen nicht.</li>
+        <li>Die Daten werden <b>täglich automatisch</b> neu abgerufen. Ausgegraut ist, wer <b>aktuell</b> verletzt ausfällt. Wer seit Beginn der Aufzeichnung verletzt gemeldet war und wieder spielt, bekommt die Markierung „wieder fit“. Verletzungen vor Beginn der Aufzeichnung (<span id="trackSince">…</span>) sind nur erfasst, wenn der Spieler an diesem Tag noch auf dem Report stand.</li>
         <li><b>Gehalt</b> = Cap-Gehalt der Saison 2026-27 aus den ESPN-Vertragsdaten; abgeglichen mit Basketball-Reference (Abweichungen v. a. bei im Sommer neu verhandelten Verträgen – hier gilt der aktuelle Vertrag).</li>
         <li><b>Two-Way-Spieler</b> haben keinen Standardvertrag und kein festes Cap-Gehalt; sie sind standardmäßig ausgeblendet und fließen nicht in Gehaltssummen ein.</li>
         <li>„Voraussichtlich zurück“ ist eine Schätzung aus dem Injury Report, keine Garantie.</li>
@@ -299,7 +318,7 @@ footer ul { padding-left: 18px; margin: 6px 0; }
       <h3>Quellen</h3>
       <ul>
         <li><a href="https://www.espn.com/nba/injuries" target="_blank" rel="noopener">ESPN NBA Injuries</a> (Status, Verletzungsart, Rückkehrprognose; Notizen via RotoWire)</li>
-        <li>ESPN Team-Kader inkl. Vertragsdaten · ESPN Standings</li>
+        <li>ESPN Team-Kader inkl. Vertragsdaten · ESPN Standings · ESPN News</li>
         <li><a href="https://www.basketball-reference.com/contracts/players.html" target="_blank" rel="noopener">Basketball-Reference: Player Contracts</a> (Abgleich)</li>
         <li><a href="https://www.cbssports.com/nba/news/nba-unprecedented-early-season-injury-crisis-players-coaches-answers/" target="_blank" rel="noopener">CBS Sports</a>, <a href="https://sports.yahoo.com/articles/were-few-games-nba-season-000733782.html" target="_blank" rel="noopener">Yahoo Sports</a> (Einordnung, Zitate)</li>
       </ul>
@@ -342,9 +361,9 @@ footer ul { padding-left: 18px; margin: 6px 0; }
     tip.style.opacity = 1;
   });
 
-  fetch('data.json').then(r => r.json()).then(init).catch(() => { $('#view').innerHTML = '<div class="card empty">Daten konnten nicht geladen werden.</div>'; });
+  Promise.all([fetch('data.json').then(r => r.json()), fetch('history.json').then(r => r.ok ? r.json() : null).catch(() => null)]).then(([D, H]) => init(D, H)).catch(() => { $('#view').innerHTML = '<div class="card empty">Daten konnten nicht geladen werden.</div>'; });
 
-  function init(D) {
+  function init(D, H) {
     const teams = Object.fromEntries(D.teams.map(t => [t.abbr, t]));
     const P = D.players;
     const isInj = p => p.inj && p.inj.injury;
@@ -358,6 +377,11 @@ footer ul { padding-left: 18px; margin: 6px 0; }
     const outN = inj.filter(p => p.inj.status === 'Out').length;
 
     const d = new Date(D.injury_report_at || D.generated);
+    const gStr = games.toLocaleString('de-DE', {maximumFractionDigits: 1});
+    $('#asof').textContent = d.toLocaleDateString('de-DE', {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Berlin'});
+    $('#gamesLead').textContent = `rund ${Math.round(games)}`;
+    const since = D.tracking_since || (H && H.since);
+    $('#trackSince').textContent = since ? 'seit ' + fmtD(since) + (since.startsWith('2026') ? '2026' : '') : 'ab heute';
     $('#meta').innerHTML = `Injury Report: ${d.toLocaleString('de-DE', {dateStyle: 'long', timeStyle: 'short', timeZone: 'Europe/Berlin'})} Uhr · ${P.length} Spieler in ${D.teams.length} Kadern · Ø ${games.toLocaleString('de-DE', {maximumFractionDigits: 1})} Spiele pro Team absolviert`;
 
     const kpi = (lbl, val, sub, share) => `<div class="kpi"><div class="lbl">${lbl}</div><div class="val">${val}</div><div class="sub">${sub}</div>${share != null ? `<div class="bar" role="img" aria-label="${share}% betroffen"><i style="width:${share}%"></i><b></b></div>` : ''}</div>`;
@@ -365,7 +389,36 @@ footer ul { padding-left: 18px; margin: 6px 0; }
       kpi('Verletzte Spieler', `${inj.length}<small> / ${P.length}</small>`, `${pct(inj.length, P.length)} % aller Kaderspieler · ${outN} „Out“, ${inj.length - outN} fraglich`, pct(inj.length, P.length)) +
       kpi('Gehalt auf der Verletztenliste', fmtM(injSal).replace(' Mrd. $', '<small> Mrd. $</small>'), `${pct(injSal, payroll)} % aller Gehälter (${fmtM(payroll)})`, pct(injSal, payroll)) +
       kpi('Top-50-Verdiener verletzt', `${top50inj}<small> / 50</small>`, `${pct(top50inj, 50)} % der bestbezahlten Spieler fehlen`, pct(top50inj, 50)) +
-      kpi('Spieler ab 40 Mio. $ verletzt', `${starsInj}<small> / ${stars.length}</small>`, `nach Ø ${games.toLocaleString('de-DE', {maximumFractionDigits: 1})} Spielen pro Team`, pct(starsInj, stars.length));
+      kpi('Spieler ab 40 Mio. $ verletzt', `${starsInj}<small> / ${stars.length}</small>`, `nach Ø ${gStr} Spielen pro Team`, pct(starsInj, stars.length)) +
+      kpi('Seit Aufzeichnung verletzt', `${Math.max(D.ever_injured || 0, inj.length)}`, `${P.filter(p => p.was).length} davon wieder fit · Aufzeichnung ${since ? 'seit ' + fmtD(since) : 'ab heute'}`, null);
+
+    // Die teuersten Ausfälle
+    $('#topOut').innerHTML = inj.filter(p => p.salary).slice(0, 8).map(p => `<li><span class="n">${esc(p.name)} <span class="tm" style="--tc:${teams[p.team].color}">${p.team}</span></span><span class="s">${fmtM(p.salary)}</span><span class="d">${esc(p.inj.type_de)}${p.inj.return ? ' · voraussichtl. zurück ' + fmtD(p.inj.return) : ''}${p.inj.note ? ' – <i>' + esc(p.inj.note) + '</i>' : ''}</span></li>`).join('');
+
+    // Meldungen
+    const news = D.news || [];
+    $('#news').innerHTML = news.length ? news.map(n => `<a href="${esc(n.url)}" target="_blank" rel="noopener"><div class="h">${esc(n.headline)}</div><div class="t">${n.published ? new Date(n.published).toLocaleString('de-DE', {day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Berlin'}) + ' Uhr · ' : ''}ESPN</div></a>`).join('') : '<div class="t" style="padding:9px 0">Aktuell keine Meldungen.</div>';
+
+    // Verlauf
+    const days = (H && H.days) || [];
+    if (days.length) {
+      const W = 1200, Hh = 210, L = 36, R = 16, T = 16, B = 28;
+      const max = Math.max(...days.map(x => x.injured)) * 1.15 || 1;
+      const x = i => days.length === 1 ? L + (W - L - R) / 2 : L + i * (W - L - R) / (days.length - 1);
+      const y = v => T + (Hh - T - B) * (1 - v / max);
+      const step = Math.pow(10, Math.floor(Math.log10(max))) * (max / Math.pow(10, Math.floor(Math.log10(max))) > 5 ? 2 : 1);
+      let g = '';
+      for (let v = 0; v <= max; v += step) g += `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text class="ax" x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+      const every = Math.ceil(days.length / 8);
+      const xl = days.map((dd, i) => i % every === 0 || i === days.length - 1 ? `<text class="ax" x="${x(i)}" y="${Hh - 6}" text-anchor="middle">${fmtD(dd.date)}</text>` : '').join('');
+      const pts = days.map((dd, i) => `${x(i)},${y(dd.injured)}`).join(' ');
+      const last = days[days.length - 1];
+      const hits = days.map((dd, i) => { const w = days.length === 1 ? 60 : (W - L - R) / (days.length - 1); return `<rect class="hit" x="${x(i) - w / 2}" y="${T}" width="${w}" height="${Hh - T - B}" data-tip="${esc(`<b>${fmtD(dd.date)}</b><br>${dd.injured} verletzt (${dd.out} Out)<br>${fmtM(dd.injured_salary)} Gehalt<br>Top-50 verletzt: ${dd.top50}`)}"/>`; }).join('');
+      $('#trendChart').innerHTML = `<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Verletzte Spieler pro Tag">${g}${xl}${days.length > 1 ? `<polyline class="ln" points="${pts}"/>` : ''}${days.map((dd, i) => `<circle class="pt" cx="${x(i)}" cy="${y(dd.injured)}" r="${days.length > 40 ? 3 : 5}"/>`).join('')}<text class="lbl" x="${x(days.length - 1) - 8}" y="${y(last.injured) - 12}" text-anchor="${days.length === 1 ? 'middle' : 'end'}">${last.injured} verletzt</text>${hits}</svg>`;
+      $('#trendHint').textContent = days.length === 1 ? `Aufzeichnung läuft seit ${fmtD(days[0].date)}2026 – ab morgen entsteht hier täglich ein neuer Punkt.` : `${days.length} Tage seit ${fmtD(days[0].date)} · tägliche Erfassung aus dem Injury Report`;
+    } else {
+      $('#trendChart').closest('.trend').style.display = 'none';
+    }
 
     // Team-Aggregate
     const agg = D.teams.map(t => {
@@ -397,6 +450,7 @@ footer ul { padding-left: 18px; margin: 6px 0; }
     // Listen
     const state = { view: 'teams', q: '', sort: 'injsal', onlyInj: false, showTw: false };
     const statusCell = p => {
+      if (!p.inj && p.was) return `<span class="pill fit" data-tip="${esc(`<b>${esc(p.name)}</b><br>verletzt gemeldet ${fmtD(p.was.first)}–${fmtD(p.was.last)} (${esc(p.was.types.join(', '))})`)}">wieder fit · war verletzt (${esc(p.was.types[0])})</span>`;
       if (!p.inj) return p.salary ? '' : '<span class="pill tw">Two-Way</span>';
       const j = p.inj;
       const cls = !j.injury ? 'neu' : j.status === 'Out' ? 'out' : 'dtd';
