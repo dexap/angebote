@@ -33,40 +33,9 @@ jobs:
     needs: test
     runs-on: [self-hosted, homeserver]
     timeout-minutes: 180
-    permissions:
-      contents: write # NBA-Verlauf in den Branch nba-data schreiben
     steps:
       - uses: actions/checkout@v7
-      # NBA-Verletzungs-Report (nba/build.py): täglich frische Daten von ESPN; Verlauf und letzter
-      # Stand liegen im Branch nba-data. Schlägt der Abruf fehl, wird der letzte Stand deployt –
-      # die Händler-API ist davon nie betroffen.
-      - name: NBA-Daten aktualisieren
-        continue-on-error: true
-        run: |
-          NBA_DATA="$RUNNER_TEMP/nba-data"
-          git worktree prune
-          rm -rf "$NBA_DATA"
-          if git ls-remote --exit-code --heads origin nba-data >/dev/null; then
-            git fetch --depth=1 origin nba-data
-            git worktree add --detach "$NBA_DATA" FETCH_HEAD
-          else
-            [ $? -eq 2 ] || exit 1 # 2 = Branch existiert noch nicht -> beim ersten Lauf anlegen
-            git worktree add --detach "$NBA_DATA" HEAD
-            git -C "$NBA_DATA" checkout -q --orphan nba-data-init
-            git -C "$NBA_DATA" rm -rfq .
-          fi
-          python3 nba/build.py update --data-dir "$NBA_DATA"
-          cd "$NBA_DATA"
-          git add data.json history.json
-          git -c user.name="github-actions[bot]" -c user.email="41898708+github-actions[bot]@users.noreply.github.com" \
-            commit -q -m "NBA-Daten $(date -u +%F)" || exit 0
-          git push origin HEAD:nba-data
       - run: python3 -m lidl_angebote.site --out _site --normalize
-      - name: NBA-Seite bauen
-        run: |
-          NBA_DATA="$RUNNER_TEMP/nba-data"
-          if [ -f "$NBA_DATA/data.json" ]; then src="$NBA_DATA"; else src=nba; fi
-          python3 nba/build.py site --data-dir "$src" --out _site/nba
       - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
